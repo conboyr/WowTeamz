@@ -35,7 +35,7 @@ const LoginController = require('../app/Controllers/LoginController.js');
 const loginRouter = require('koa-router')({
     prefix: '/login'
 });
-loginRouter.get('/:user_id', LoginController.authorizeUser, (err) => console.log("draught_services_routes.js: login-route error:", err));
+loginRouter.get('/:email', LoginController.authorizeUser, (err) => console.log("wowteamz_routes.js: login-route error:", err));
 
 // Routes router configuration.
 

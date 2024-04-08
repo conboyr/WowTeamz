@@ -13,13 +13,13 @@ var connection = mysql.createConnection({
 */
 
 var connection = mysql.createConnection({
-//    debug: true,
+    debug: true,
 
     host: 'localhost',
     port: 3306,
-    user: 'yourDBuserName',
-    password: 'yourDBpassword',
-    database: 'draught_services'
+    user: 'cruzc',
+    password: '33kwemanpoop',
+    database: 'wowteamz'
 });
 
 module.exports = connection;
