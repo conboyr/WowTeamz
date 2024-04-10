@@ -49,6 +49,18 @@ accountsRouter.get('/all-accounts', AccountsController.allAccounts, err => conso
 accountsRouter.get('/:email/', AccountsController.accountWithEmail);
 
 
+// RaidTeams router configuration.
+
+const RaidTeamsController = require('../app/Controllers/RaidTeamsController.js');
+const raidteamsRouter = require('koa-router')({
+    prefix: '/raidteams'
+});
+
+//accountsRouter.use(VerifyJWT);
+raidteamsRouter.get('/all-raidteams', RaidTeamsController.allRaidTeams, err => console.log(`allAccounts ran into an error: ${err}`));
+raidteamsRouter.get('/:raidteam_id/:character_id', RaidTeamsController.addPlayerToRaid);
+
+
 
 /**
  * Register all of the controllers into the default controller.
@@ -56,7 +68,8 @@ accountsRouter.get('/:email/', AccountsController.accountWithEmail);
 router.use(
     '',
     loginRouter.routes(),
-    accountsRouter.routes()
+    accountsRouter.routes(),
+    raidteamsRouter.routes()
 );
 
 module.exports = function (app) {
