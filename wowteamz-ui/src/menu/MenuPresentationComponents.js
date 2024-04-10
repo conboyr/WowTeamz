@@ -1,4 +1,5 @@
 import Accounts from '../Components/Accounts/Accounts';
+import Characters from '../Components/Characters/Characters';
 import Routes from '../Components/Routes/Routes';
 import Markets from '../Components/Markets/Markets';
 import Transactions from '../Components/Transactions/Transactions';
@@ -19,8 +20,12 @@ const presentationComponents = (props) => {
             component: <Routes/>
         },
         {
-            title: 'Accounts',
+            title: 'Account',
             component: <Accounts/>
+        },
+        {
+            title: 'Add Character',
+            component: <Characters/>
         },
         {
             title: 'Transactions',

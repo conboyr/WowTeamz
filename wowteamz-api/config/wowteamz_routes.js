@@ -1,5 +1,5 @@
-const Authorize = require('../app/Middleware/Authorize.js');
-const VerifyJWT = require('../app/Middleware/VerifyJWT.js');
+//const Authorize = require('../app/Middleware/Authorize.js');
+//const VerifyJWT = require('../app/Middleware/VerifyJWT.js');
 
 
 /*
@@ -37,16 +37,17 @@ const loginRouter = require('koa-router')({
 });
 loginRouter.get('/:email', LoginController.authorizeUser, (err) => console.log("wowteamz_routes.js: login-route error:", err));
 
-// Routes router configuration.
+// Accounts router configuration.
 
-const RoutesController = require('../app/Controllers/RoutesController.js');
-const routesRouter = require('koa-router')({
-    prefix: '/routes'
+const AccountsController = require('../app/Controllers/AccountsController.js');
+const accountsRouter = require('koa-router')({
+    prefix: '/accounts'
 });
 
-routesRouter.use(VerifyJWT);
-routesRouter.get('/all-routes', Authorize('admin'), RoutesController.allRoutes, err => console.log(`allRoutes ran into an error: ${err}`));
-routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.routeWithRouteID);
+//accountsRouter.use(VerifyJWT);
+accountsRouter.get('/all-accounts', AccountsController.allAccounts, err => console.log(`allAccounts ran into an error: ${err}`));
+accountsRouter.get('/:email/', AccountsController.accountWithEmail);
+
 
 
 /**
@@ -55,7 +56,7 @@ routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.routeWithRou
 router.use(
     '',
     loginRouter.routes(),
-    routesRouter.routes()
+    accountsRouter.routes()
 );
 
 module.exports = function (app) {

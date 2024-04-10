@@ -1,25 +1,16 @@
 var mysql      = require('mysql');
 
-/*
-var connection = mysql.createConnection({
-//    debug: true,
-
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_DATABASE,
-});
-*/
+//var client_id = '482ea42427f84732a25ea8469ccb4e4a';
+//var client_secret = 'wlWyNjtC8vxAsxHA7MiRrtNvuPfHVj9X';
 
 var connection = mysql.createConnection({
     debug: true,
 
-    host: 'localhost',
+    host: 'wowteams.c1yk0064mthe.us-east-1.rds.amazonaws.com',
     port: 3306,
-    user: 'cruzc',
-    password: '33kwemanpoop',
-    database: 'wowteamz'
+    user: 'admin',
+    password: 'cs470isfun',
+    database: 'WOW_TEAMS'
 });
 
 module.exports = connection;

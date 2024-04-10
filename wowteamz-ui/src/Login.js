@@ -22,18 +22,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const defaultTheme = createTheme();
 
-function Copyright(props) {
-    return (
-      <Typography variant="body2" color="text.secondary" align="center" {...props}>
-        {'Copyright © '}
-        <Link color="inherit" href="https://mui.com/">
-          Your Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
+
 
 export default function Login({setUser}) {
     const [userInput, setUserInput] = useState('');
@@ -118,7 +107,7 @@ export default function Login({setUser}) {
             </Typography>
             <Box component="form" noValidate sx={{ mt: 1 }}>
             <Box display="flex" justifyContent="center" alignItems="center" width="100%" mt={10}>
-
+                
                 <TextField
                     error={authFailed}
                     id="outlined-error-helper-text"
@@ -157,7 +146,7 @@ export default function Login({setUser}) {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
+        
             </Box>
           </Box>
 

@@ -33,6 +33,14 @@ export default class APIInterface {
                  }));
     }
 
+    async allAccounts() {
+        return axiosAgent.get(`accounts/all-accounts`);
+    }
+
+    async accountWithEmail(email) {
+        return axiosAgent.get(`accounts/${email}`);
+    }
+
     async allRoutes() {
         return axiosAgent.get(`routes/all-routes`);
     }

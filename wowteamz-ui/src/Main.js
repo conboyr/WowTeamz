@@ -6,12 +6,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 
-
-
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
-
 const logout = (setUser) => {
     return () => {
         setUser(undefined);

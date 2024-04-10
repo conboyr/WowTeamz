@@ -9,9 +9,7 @@ function now() {
 const allAccounts = async (ctx) => {
     console.log('accounts all accounts called.');
     return new Promise((resolve, reject) => {
-        const query = `
-                       SELECT * FROM WT_Account
-                        `;
+        let query = "SELECT * FROM WT_Account";
         dbConnection.query({
             sql: query,
         }, (error, tuples) => {
