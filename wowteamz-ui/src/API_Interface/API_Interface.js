@@ -41,12 +41,15 @@ export default class APIInterface {
         return axiosAgent.get(`accounts/${email}`);
     }
 
-    async allRoutes() {
-        return axiosAgent.get(`routes/all-routes`);
+
+
+
+    async allRaidTeams() {
+        return axiosAgent.get(`raidteams/all-raidteams`);
     }
 
-    async routesWithID(routeID) {
-        return axiosAgent.get(`routes/${routeID}`);
+    async addPlayerToRaid(raidteam_id, character_id) {
+        return axiosAgent.get(`raidteams/${raidteam_id}/${character_id}`);
     }
 
 }

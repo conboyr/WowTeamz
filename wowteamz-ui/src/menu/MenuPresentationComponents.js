@@ -1,6 +1,6 @@
 import Accounts from '../Components/Accounts/Accounts';
 import Characters from '../Components/Characters/Characters';
-import Routes from '../Components/Routes/Routes';
+import RaidTeams from '../Components/RaidTeams/RaidTeams';
 import Markets from '../Components/Markets/Markets';
 import Transactions from '../Components/Transactions/Transactions';
 import Summary from '../Components/SummaryPage/Summary';
@@ -16,8 +16,8 @@ const presentationComponents = (props) => {
             component: <Markets/>
         },
         {
-            title: 'Routes',
-            component: <Routes/>
+            title: 'Raid Team',
+            component: <RaidTeams/>
         },
         {
             title: 'Account',
