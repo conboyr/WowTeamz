@@ -44,6 +44,11 @@ const accountsTableAttributes = [
         attributeDBName: 'account_id',
         align: 'left'
     },
+    {
+        title: 'Role',
+        attributeDBName: 'role',
+        align: 'left'
+    },
 ]; 
 
 export default function NameInputComponent() {

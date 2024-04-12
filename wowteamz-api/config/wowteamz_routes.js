@@ -1,5 +1,5 @@
-//const Authorize = require('../app/Middleware/Authorize.js');
-//const VerifyJWT = require('../app/Middleware/VerifyJWT.js');
+const Authorize = require('../app/Middleware/Authorize.js');
+const VerifyJWT = require('../app/Middleware/VerifyJWT.js');
 
 
 /*
@@ -44,9 +44,9 @@ const accountsRouter = require('koa-router')({
     prefix: '/accounts'
 });
 
-//accountsRouter.use(VerifyJWT);
-accountsRouter.get('/all-accounts', AccountsController.allAccounts, err => console.log(`allAccounts ran into an error: ${err}`));
-accountsRouter.get('/:email/', AccountsController.accountWithEmail);
+accountsRouter.use(VerifyJWT);
+accountsRouter.get('/all-accounts', Authorize('admin'), AccountsController.allAccounts, err => console.log(`allAccounts ran into an error: ${err}`));
+accountsRouter.get('/:email/', Authorize('admin'), AccountsController.accountWithEmail);
 
 
 // RaidTeams router configuration.
@@ -56,9 +56,9 @@ const raidteamsRouter = require('koa-router')({
     prefix: '/raidteams'
 });
 
-//accountsRouter.use(VerifyJWT);
-raidteamsRouter.get('/all-raidteams', RaidTeamsController.allRaidTeams, err => console.log(`allAccounts ran into an error: ${err}`));
-raidteamsRouter.get('/:raidteam_id/:character_id', RaidTeamsController.addPlayerToRaid);
+raidteamsRouter.use(VerifyJWT);
+raidteamsRouter.get('/all-raidteams', Authorize('admin'), RaidTeamsController.allRaidTeams, err => console.log(`allRaidTeams ran into an error: ${err}`));
+raidteamsRouter.get('/:raidteam_id/:character_id', Authorize('admin'), RaidTeamsController.addPlayerToRaid);
 
 
 
