@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import API from "./API_Interface/API_Interface";
-
 import {
-  Avatar, Box, Button, Checkbox, CssBaseline, FormControlLabel,
+  Avatar, Box, Button, Checkbox, CssBaseline, Divider, FormControlLabel,
   Grid, Link, Paper, TextField, Typography, createTheme, ThemeProvider
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -17,31 +16,37 @@ export default function Login({ setUser }) {
 
   const handleLogin = () => {
     console.log("handleLogin called.");
-
-    const api = new API();
-    api.getUserInfo(email, password)
-      .then(userInfo => {
-        console.log(`api returns user info and it is: ${JSON.stringify(userInfo)}`);
-        const user = userInfo.user;
-        if (userInfo.status === "OK") {
-          setUser(user);
-        } else {
-          setAuthFailed(true);
-        }
-      })
-      .catch(error => {
-        console.error("Login error:", error);
-        setAuthFailed(true);
-      });
+    if (email.length === 0 || password.length === 0) {
+      setAuthFailed(true);
+    } else {
+      setAuthFailed(false);
+      setVerifyUser(true);  // Move user verification flag here
+    }
   };
 
   useEffect(() => {
-    if (!verifyUser || email.length === 0 || password.length === 0) {
-      return;
+    if (!verifyUser) return;
+
+    const api = new API();
+    async function getUserInfo() {
+        api.getUserInfo(email, password)
+        .then( userInfo => {
+        console.log(`API returns user info and it is: ${JSON.stringify(userInfo)}`);
+        const user = userInfo.data.user;
+        console.log("BELOW IS USER");
+        console.log(user);
+        if (userInfo.data.status === "OK") {
+          console.log("SETTING USER to USER");
+          setUser(user);
+        } else {
+          setVerifyUser(false);
+          setAuthFailed(true);
+        }
+      });
     }
 
-    handleLogin();
-  }, [verifyUser, email, password, setUser]);
+    getUserInfo();
+  }, [verifyUser, email, password, setUser]); // Ensure dependencies are correctly listed
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -79,7 +84,7 @@ export default function Login({ setUser }) {
                 type="password"
                 fullWidth
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(p) => setPassword(p.target.value)}
                 margin="normal"
                 helperText={authFailed ? "Invalid email or password" : ""}
               />
@@ -91,7 +96,7 @@ export default function Login({ setUser }) {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={() => setVerifyUser(true)}
+                onClick={handleLogin}
               >
                 Sign In
               </Button>

@@ -6,9 +6,9 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import MainDrawer from './menu/MainDrawer';
 
-const makeUserName = ({userName}) => {
+const makeUserName = ({email, userName}) => {
 
-    return `${userName}`;
+    return `${email} ${userName}`;
 };
 
 export default function App({user, logoutAction}) {

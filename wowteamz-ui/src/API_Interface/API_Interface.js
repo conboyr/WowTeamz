@@ -24,18 +24,10 @@ const axiosAgent = AxiosConfigured();
 export default class APIInterface {
 
     async getUserInfo(email, password) {
-        try {
-            const response = await axiosAgent.post(`/login/`, { email: email, password: password });
-            return response.data;
-        } catch (error) {
-            console.error('Error:', error);
-            return {
-                error,
-                user: undefined
-            };
-        }
+        console.log(JSON.stringify(email));
+        console.log(JSON.stringify(password));
+        return axiosAgent.post(`/login/`, {email, password});
     }
-    
 
     async allAccounts() {
         return axiosAgent.get(`accounts/all-accounts`);
