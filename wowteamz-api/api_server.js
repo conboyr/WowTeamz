@@ -2,6 +2,7 @@ const Koa = require('koa');
 const app = new Koa();
 const bodyParser = require('koa-bodyparser');
 const http = require('http');
+const bcrypt = require('bcrypt');
 
 // Load environment variables (or .env if local environment)
 require('dotenv').config();

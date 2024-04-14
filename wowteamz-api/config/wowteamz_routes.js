@@ -1,6 +1,6 @@
 const Authorize = require('../app/Middleware/Authorize.js');
 const VerifyJWT = require('../app/Middleware/VerifyJWT.js');
-
+const bcrypt = require('bcrypt');
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +35,10 @@ const LoginController = require('../app/Controllers/LoginController.js');
 const loginRouter = require('koa-router')({
     prefix: '/login'
 });
-loginRouter.get('/:email', LoginController.authorizeUser, (err) => console.log("wowteamz_routes.js: login-route error:", err));
+
+loginRouter.post('/', LoginController.authorizeUser);
+//loginRouter.get('/:email', LoginController.authorizeUser, (err) => console.log("wowteamz_routes.js: login-route error:", err));
+
 
 // Accounts router configuration.
 

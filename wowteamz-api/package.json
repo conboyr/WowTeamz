@@ -10,6 +10,8 @@
   "author": "Ali A. Kooshesh",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "csrf": "^3.0.6",
     "dateformat": "^3.0.3",
     "dotenv": "^4.0.0",
