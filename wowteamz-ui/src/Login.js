@@ -21,22 +21,22 @@ const defaultTheme = createTheme();
 
 export default function Login({ setUser }) {
   const [userInput, setUserInput] = useState("");
+  const [passwordInput, setPassword] = useState("");
   const [verifyUser, setVerifyUser] = useState(false);
   const [authFailed, setAuthFailed] = useState(false);
 
   const handleInputChange = (event) => {
     console.log("handleInputChange called.");
 
-    //        event.stopPropagation();
-    //        event.preventDefault();
-
     setUserInput(event.target.value);
     setAuthFailed(false);
+  };
 
-    if (event.key === "Sign In") {
-      console.log("handleKeyPress: Verify user input.");
-      setVerifyUser(true);
-    }
+  const handlePasswordChange = (event) => {
+    console.log("handleInputChange called.");
+
+    setPassword(event.target.value);
+    setAuthFailed(false);
   };
 
   useEffect(() => {
@@ -122,8 +122,8 @@ export default function Login({ setUser }) {
                   label="Password"
                   placeholder=""
                   fullWidth
-                  value={userInput}
-                  onChange={handleInputChange}
+                  value={passwordInput}
+                  onChange={handlePasswordChange}
                 />
                 <Divider />
               </Box>
