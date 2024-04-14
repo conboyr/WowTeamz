@@ -1,5 +1,6 @@
 import Login from './Login';
 import App from './App';
+import Signup from './Signup';
 import {useState, Fragment} from 'react';
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -22,8 +23,9 @@ const [user, setUser] = useState(undefined);
                     <App user={user} logoutAction={logout(setUser)} />
                 ) : (
                     <Login user={user} setUser={setUser} />
-                )
+                ) 
             }
+            
             </Fragment> 
   );
 }

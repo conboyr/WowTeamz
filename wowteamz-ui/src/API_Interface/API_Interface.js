@@ -23,15 +23,19 @@ const axiosAgent = AxiosConfigured();
 
 export default class APIInterface {
 
-    async getUserInfo(user_id) {
-        return axiosAgent.get(`login/${user_id}`)
-            .then(userInfo => userInfo.data)
-            .catch(error => (
-                {
-                    error,
-                    user: undefined
-                 }));
+    async getUserInfo(email, password) {
+        try {
+            const response = await axiosAgent.post(`/login/`, { email: email, password: password });
+            return response.data;
+        } catch (error) {
+            console.error('Error:', error);
+            return {
+                error,
+                user: undefined
+            };
+        }
     }
+    
 
     async allAccounts() {
         return axiosAgent.get(`accounts/all-accounts`);
