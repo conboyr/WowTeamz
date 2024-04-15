@@ -80,7 +80,7 @@ const characterRouter = require('koa-router')({
 characterRouter.use(VerifyJWT);
 characterRouter.post('/insert', Authorize('admin'), CharacterController.insertCharacter);
 characterRouter.get('/all-characters', Authorize('admin'), CharacterController.allCharacters);
-
+characterRouter.delete('/delete/:name', Authorize('admin'), CharacterController.deleteCharacter);
 /**
  * Register all of the controllers into the default controller.
  */

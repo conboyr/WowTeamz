@@ -5,28 +5,39 @@ const buildStudentViewFromCourses = require('../Schema/buildStudentViewFromCours
 //const fetch = require('node-fetch');
 
 async function callBlizzardAPI(userName) {
-    const API_KEY = 'US4hhyJwuQ11JwH5lhUFx2viOGVuqPqSKS'; // Use environment variables for production
+    const API_KEY = 'US4hhyJwuQ11JwH5lhUFx2viOGVuqPqSKS';
+    const url = `https://raider.io/api/v1/characters/profile?region=us&realm=illidan&name=${userName}&fields=gear`;
+
     try {
-        const response = await fetch(`https://raider.io/api/v1/characters/profile?region=us&realm=illidan&name=${userName}&fields=gear`);
+        const response = await fetch(url);
         if (!response.ok) {
+            console.error(`Blizzard API call failed with status: ${response.status}`);
             throw new Error('Network response was not ok');
         }
+
         const data = await response.json();
+        console.log(`Data received: ${JSON.stringify(data)}`);
 
-        const name = data.name;
-        const characterClass = data.class;
-        const race = data.race;
-        const gearLevel = data.gear.item_level_equipped;
-        const imgData = data.thumbnail_url;
+        if (!data.thumbnail_url) {
+            console.error('Thumbnail URL is missing from the API response');
+            throw new Error('Thumbnail URL is missing');
+        }
 
-        return { name, characterClass, race, gearLevel, imgData };
+        return {
+            name: data.name,
+            characterClass: data.class,
+            race: data.race,
+            gearLevel: data.gear.item_level_equipped,
+            imgPath: data.thumbnail_url
+        };
     } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
+        console.error(`Error in callBlizzardAPI: ${error}`);
         throw error;
     }
 }
 const insertCharacter = async (ctx) => {
     const userName = ctx.request.body.userName;
+    console.log(userName.imgPath);
     try {
         const { name, characterClass, race, gearLevel, imgPath } = await callBlizzardAPI(userName);
 
@@ -80,7 +91,37 @@ const allCharacters = async (ctx) => {
         ctx.status = 500;
     });
 }
+const deleteCharacter = async (ctx) => {
+    const name = ctx.params.name;  // Assuming you're passing the character's ID in the route parameter
+    try {
+        const query = `
+            DELETE FROM WT_Character
+            WHERE name = ?;
+        `;
+        await new Promise((resolve, reject) => {
+            dbConnection.query({
+                sql: query,
+                values: [name]
+            }, (error, results) => {
+                if (error) {
+                    console.error("Database deletion error:", error);
+                    ctx.status = 500;
+                    ctx.body = { message: "Failed to delete character" };
+                    return reject(error);
+                }
+                ctx.status = 200;
+                ctx.body = { message: "Character deleted successfully" };
+                resolve();
+            });
+        });
+    } catch (error) {
+        console.error('Error deleting character data:', error);
+        ctx.status = 500;
+        ctx.body = { message: "Failed to delete data", error: error.message };
+    }
+};
 module.exports = {
     insertCharacter,
-    allCharacters
+    allCharacters,
+    deleteCharacter
 };

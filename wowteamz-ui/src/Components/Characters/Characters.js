@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import API from '../../API_Interface/API_Interface'; // Ensure this path is correct
-import { Box, TextField, IconButton, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Box, TextField, IconButton, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 const characterTableAttributes = [
@@ -40,6 +40,7 @@ function NameInputComponent() {
     useEffect(() => {
         const fetchCharacters = async () => {
             const response = await api.allCharacters();
+
             if (response.data) {
                 setCharacters(response.data);
             }
@@ -55,6 +56,7 @@ function NameInputComponent() {
         if (name) {
             try {
                 const characterData = await api.insertCharacter(name);
+                console.log(characterData);
                 if (characterData.error) {
                     throw characterData.error;
                 }
@@ -66,7 +68,20 @@ function NameInputComponent() {
             }
         }
     };
-
+    const handleDelete = async (characterName) => {
+        try {
+            const encodedName = characterName;
+            const response = await api.deleteCharacter(encodedName);
+            if (response.status === 200) {
+                setCharacters(characters.filter(char => char.name !== characterName));
+            } else {
+                throw new Error('Failed to delete character');
+            }
+        } catch (error) {
+            console.error('Error deleting character:', error);
+            // Optionally, show an error message to the user
+        }
+    };
     return (
         <Box>
             <Typography variant="h4" sx={{ mb: 2 }}>
@@ -81,29 +96,26 @@ function NameInputComponent() {
                                     {attr.title}
                                 </TableCell>
                             ))}
+                            <TableCell align="center">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {characters.map((character, index) => (
                             <TableRow key={index}>
-                                {characterTableAttributes.map((attr) => {
-                                    const content = attr.attributeDBName === 'imagePath' ? (
-                                        <img src={character[attr.attributeDBName]} alt={`Avatar of ${character.name}`} style={{ width: '100px', height: '100px' }} />
-                                    ) : (
-                                        character[attr.attributeDBName]
-                                    );
-
-                                    // Log to console for debugging
-                                    if (attr.attributeDBName === 'imgPath') {
-                                        console.log(`Image path for ${character.name}:`, character[attr.attributeDBName]);
-                                    }
-
-                                    return (
-                                        <TableCell key={attr.title} align={attr.align}>
-                                            {content}
-                                        </TableCell>
-                                    );
-                                })}
+                                {characterTableAttributes.map((attr) => (
+                                    <TableCell key={attr.title} align={attr.align}>
+                                        {attr.attributeDBName === 'imagePath' ? (
+                                            <img src={character[attr.attributeDBName]} alt={`Avatar of ${character.name}`} style={{ width: '100px', height: '100px' }} />
+                                        ) : (
+                                            character[attr.attributeDBName]
+                                        )}
+                                    </TableCell>
+                                ))}
+                                <TableCell align="center">
+                                    <Button variant="outlined" color="error" onClick={() => handleDelete(character.name)}>
+                                        Delete
+                                    </Button>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

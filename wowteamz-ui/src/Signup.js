@@ -10,7 +10,7 @@ import Container from '@mui/material/Container';
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function SignUp({setSignupMode, setUser}) {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,8 +22,15 @@ export default function SignUp() {
     setUserCheck(true);
   };
 
-  useEffect(() => {
+  const handleSignin = () => {
+    console.log('Signin called');
+    setSignupMode(false);
+  };
 
+  // ADD TO DATABASE 
+
+  useEffect(() => {
+    if (email.length === 0 || userName.length === 0 || password.length === 0) return;
     const api = new API();
     async function insertNewUser() {
         api.insertNewUser(userName, email, password)
@@ -33,10 +40,12 @@ export default function SignUp() {
         console.log("BELOW IS USER");
         console.log(user);
         if (userInfo.data.status === "NOT FOUND") {
-          console.log("USER IS NOT FOUND, PROCEED WITH SIGNUP");
+          window.alert("Signup Sucessful, Thank you for signing up!");
+          setUser(user);
           setExist(false);
+          setSignupMode(false);
         } else {
-          alert("Signup Sucessful, Thank you for signing up!");
+          window.alert("Signup Not Sucessful");
         }
       });
     }
@@ -44,22 +53,23 @@ export default function SignUp() {
     insertNewUser();
   }, [exist]);
 
-  useEffect(() => {
+  // CHECK FOR USER
 
+  useEffect(() => {
+    if (email.length === 0) return;
     const api = new API();
     async function checkUserEmail() {
         api.checkUserEmail(email)
         .then( userInfo => {
-        console.log(`API returns user info and it is: ${JSON.stringify(userInfo)}`);
+        console.log(`API returns user info and it is: ${JSON.stringify(userInfo.data.user)}`);
         const user = userInfo.data.user;
         console.log("BELOW IS USER");
         console.log(user);
         if (userInfo.data.status === "NOT FOUND") {
           console.log("USER IS NOT FOUND, PROCEED WITH SIGNUP");
-          setExist(false);
           setUserCheck(false);
         } else {
-          alert("Email already in use, please try another email address.");
+          window.alert("Email already in use, please try another email address.");
         }
       });
     }
@@ -131,7 +141,6 @@ export default function SignUp() {
               </Grid>
             </Grid>
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
@@ -141,7 +150,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link variant="body2" onClick={handleSignin} >
                   Already have an account? Sign in
                 </Link>
               </Grid>

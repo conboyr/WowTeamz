@@ -40,7 +40,7 @@ export default class APIInterface {
     async insertNewUser(userName, email, password) {
         console.log(JSON.stringify(email));
         console.log(JSON.stringify(password));
-        return axiosAgent.post(`/signup/`, {userName, email, password});
+        return axiosAgent.post(`/signup/`, {email, password, userName});
     }
 
     //Characters
@@ -56,6 +56,10 @@ export default class APIInterface {
     async allCharacters() {
         return axiosAgent.get(`characters/all-characters`);
 
+    }
+
+    async deleteCharacter(characterName) {
+        return axios.delete(`/characters/delete/${encodeURIComponent(characterName)}`);
     }
 
     //Accounts

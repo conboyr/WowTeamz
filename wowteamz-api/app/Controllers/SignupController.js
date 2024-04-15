@@ -16,18 +16,22 @@ const checkUserExist = (ctx) => {
         }, (error, tuples) => {
             if (error) {
                 console.log("Query error.", error);
-                reject(`Query error. Error msg: ${error}`);
-                return;
+                
             }
-            console.log(ctx);
-            console.log('here is the ctx');
-
             if (tuples.length === 1) {
                 const user = tuples[0];
-                console.log('A User with this email already exists');
-                reject('A User with this email already exists');
-            } else {
-                // If user with the given email does not exist, resolve the promise
+                console.log('HERE I AM')
+                console.log(user);
+                console.log('HERE I AM')
+                console.log('User already exists');
+                reject('User already exists');
+            }
+            else{
+                console.log('No user in database, proceed.');
+            
+            
+            //console.log(ctx);
+            //console.log('here is the ctx');
                 resolve();
             }
         });
@@ -44,23 +48,24 @@ const checkUserExist = (ctx) => {
 
 
 const addUser = (ctx) => {
-    const { userName, email, password } = ctx.request.body;
+    const {email, password, userName} = ctx.request.body;
 
-    console.log(userName, email, password);
+    console.log(email, password, userName);
 
     return new Promise((resolve, reject) => {
-        let query = "INSERT INTO WT_Account (email,  userName, `password`) VALUES (?, ?, ?)";
+        let query = "INSERT INTO WT_Account (email, password, userName) VALUES (?, ?, ?)"
+        ;
         dbConnection.query({
             sql: query,
-            values: [email, userName, password]
+            values: [email, password, userName]
         }, (error, tuples) => {
             if (error) {
                 console.log("Query error.", error);
                 reject(`Query error. Error msg: ${error}`);
                 return;
             }
-            console.log(ctx);
-            console.log('here is the ctx');
+           // console.log(ctx);
+           // console.log('here is the ctx');
             
             if (tuples.length === 1) {
                 const user = tuples[0];
