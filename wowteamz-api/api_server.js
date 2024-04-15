@@ -2,6 +2,7 @@ const Koa = require('koa');
 const app = new Koa();
 const bodyParser = require('koa-bodyparser');
 const http = require('http');
+const bcrypt = require('bcrypt');
 
 // Load environment variables (or .env if local environment)
 require('dotenv').config();
@@ -23,7 +24,7 @@ app.use(async (ctx, next) => {
     });
 });
 
-
+// require('./config/courses_routes.js')(app);
 require('./config/wowteamz_routes.js')(app);
 
 const httpsServer = require('./config/ssl/ssl.js')(app.callback());

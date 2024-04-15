@@ -1,4 +1,4 @@
-var mysql      = require('mysql');
+var mysql = require('mysql');
 
 //var client_id = '482ea42427f84732a25ea8469ccb4e4a';
 //var client_secret = 'wlWyNjtC8vxAsxHA7MiRrtNvuPfHVj9X';

@@ -1,13 +1,14 @@
 const dbConnection = require('../../database/mySQLconnect');
 const setAccessToken = require('../../config/setAccessToken');
 
-
 require('dotenv').config();
 
-const authorizeUser = async (ctx) => {
-    return new Promise((resolve, reject) => {
-        const {email} = ctx.params; // Assuming email and password are passed in params
+const authorizeUser = (ctx) => {
+    const { email, password } = ctx.request.body;
 
+    console.log(email, password);
+
+    return new Promise((resolve, reject) => {
         let query = "SELECT * FROM WT_Account WHERE email = ?";
         dbConnection.query({
             sql: query,
@@ -15,42 +16,50 @@ const authorizeUser = async (ctx) => {
         }, (error, tuples) => {
             if (error) {
                 console.log("Query error.", error);
-                ctx.status = 500; // Internal Server Error
-                ctx.body = {
-                    status: "Failed",
-                    error: "Query error.",
-                    user: null
-                };
-                return reject("Query error.");
+                reject(`Query error. Error msg: ${error}`);
+                return;
             }
-            if (tuples.length === 1) {  // Match found
-                setAccessToken(ctx, tuples[0]);
-                console.log('Authorization successful. User:', tuples[0]);
-                ctx.status = 200;
-                ctx.body = {
-                    status: "OK",
-                    user: tuples[0],
-                };
-                resolve();
+            console.log(ctx);
+            console.log('here is the ctx');
+            
+            if (tuples.length === 1) {
+                const user = tuples[0];
+                console.log('HERE I AM')
+                console.log(user.password);
+                console.log(password);
+                console.log('HERE I AM')
+                // Compare the provided password with the hashed password from the database
+                if (password === user.password) {
+                    setAccessToken(ctx, user);
+                    console.log('from studentRecord. About to return ', user);
+                    ctx.body = {
+                        status: "OK",
+                        user: user,
+                }
+                } else {
+                    console.log('Password does not match.');
+                    reject('Password does not match.');
+                }
             } else {
-                console.log('Credentials do not match.');
-                ctx.status = 401; // Unauthorized
-                ctx.body = {
-                    status: "Failed",
-                    error: "Credentials do not match.",
-                    user: null
-                };
-                reject('Credentials do not match.');
+                console.log('Not able to identify the user.');
+                reject('No such user.');
             }
+            //setAccessToken(ctx, tuples[0]);
+            resolve();
         });
     }).catch(err => {
-        console.log('authorizeUser threw an exception. Reason:', err);
-        // Note: Handling for catch block might be redundant here if the promises inside are already setting ctx.status and ctx.body.
-        // You might want to handle the rejection logic inside the previous blocks.
+        console.log('authorize in LoginController threw an exception. Reason...', err);
+        ctx.status = 400;  // Use a more appropriate status code for errors
+        ctx.body = {
+            status: "Failed",
+            error: err,
+            user: null
+        };
     });
 };
 
 
 module.exports = {
-    authorizeUser,
+    authorizeUser
 };
+

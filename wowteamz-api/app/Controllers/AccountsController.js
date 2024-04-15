@@ -30,7 +30,7 @@ const allAccounts = async (ctx) => {
     });
 }
 
-const accountWithEmail = (ctx) => {
+const accountWithEmail = async (ctx) => {
         return new Promise((resolve, reject) => {
             const {email} = ctx.params; // Assuming email and password are passed in params
 

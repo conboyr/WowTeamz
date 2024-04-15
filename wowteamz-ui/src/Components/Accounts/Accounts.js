@@ -9,24 +9,21 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Avatar from '@mui/material/Avatar';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+//import TextField from '@mui/material/TextField';
+//import Button from '@mui/material/Button';
+//import Box from '@mui/material/Box';
+//import Divider from '@mui/material/Divider';
+//import Avatar from '@mui/material/Avatar';
+//import CssBaseline from '@mui/material/CssBaseline';
+//import FormControlLabel from '@mui/material/FormControlLabel';
+//import Checkbox from '@mui/material/Checkbox';
+//import Link from '@mui/material/Link';
+//import Grid from '@mui/material/Grid';
+//import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+//import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-import IconButton from '@mui/material/IconButton';
-
-import AddIcon from '@mui/icons-material/Add';
 
 const accountsTableAttributes = [
     {
@@ -42,6 +39,11 @@ const accountsTableAttributes = [
     {
         title: 'Account ID',
         attributeDBName: 'account_id',
+        align: 'left'
+    },
+    {
+        title: 'Role',
+        attributeDBName: 'role',
         align: 'left'
     },
 ]; 
