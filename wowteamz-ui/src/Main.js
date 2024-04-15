@@ -1,16 +1,22 @@
 import React, { Fragment, useState } from 'react';
 import Login from './Login';
 import App from './App';
-
-const logout = (setUser) => {
-    return () => {
-        setUser(undefined);
-    }
-};
+import Signup from './Signup';
 
 export default function Main() {
-
     const [user, setUser] = useState(undefined);
+    const [signupMode, setSignupMode] = useState(false);
+
+    const logout = (setUser) => {
+        return () => {
+            setUser(undefined);
+        }
+    };
+    
+
+    const toggleMode = () => {
+        setSignupMode(!signupMode);
+    };
 
     return (
         <Fragment>
@@ -18,10 +24,13 @@ export default function Main() {
                 user !== undefined ? (
                     <App user={user} logoutAction={logout(setUser)} />
                 ) : (
-                    <Login user={user} setUser={setUser} />
+                    signupMode ? (
+                        <Signup setUser={setUser} toggleMode={toggleMode} />
+                    ) : (
+                        <Login setUser={setUser} toggleMode={toggleMode} />
+                    )
                 )
             }
         </Fragment>
-    )
-
+    );
 }

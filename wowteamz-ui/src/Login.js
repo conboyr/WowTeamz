@@ -101,12 +101,20 @@ export default function Login({ setUser }) {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item>
-                  <Link href="./Signup" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
+              <Grid item>
+                <Typography component="h7" variant="h7">
+                  New User?
+                </Typography>
+                <Button
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2, marginLeft: 1 }} // Added marginLeft to create space between the Typography and Button
+                  onClick={handleLogin}
+                >
+                  Sign up here.
+                </Button>
               </Grid>
+            </Grid>
+
             </Box>
           </Box>
         </Grid>
