@@ -89,6 +89,7 @@ router.use(
     loginRouter.routes(),
     signupRouter.routes(),
     accountsRouter.routes(),
+    characterRouter.routes(),
     raidteamsRouter.routes()
 );
 
