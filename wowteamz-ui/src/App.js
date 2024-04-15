@@ -8,6 +8,8 @@ const theme = createTheme({
       main: "#fefefe",
     },
   },
+  // Used for fonts
+  typography: {},
 });
 
 const makeUserName = ({ email, userName }) => {
