@@ -23,11 +23,42 @@ const axiosAgent = AxiosConfigured();
 
 export default class APIInterface {
 
+    //Login
+
     async getUserInfo(email, password) {
         console.log(JSON.stringify(email));
         console.log(JSON.stringify(password));
         return axiosAgent.post(`/login/`, {email, password});
     }
+
+    //Signup
+
+    async checkUserEmail(email) {
+        return axiosAgent.get(`/signup/${email}`);
+    }
+
+    async insertNewUser(userName, email, password) {
+        console.log(JSON.stringify(email));
+        console.log(JSON.stringify(password));
+        return axiosAgent.post(`/signup/`, {userName, email, password});
+    }
+
+    //Characters
+
+    async insertCharacter(userName) {
+        return axiosAgent.post(`/characters/insert`, { userName })
+            .then(response => response.data)
+            .catch(error => ({
+                error,
+                character: undefined
+            }));
+    }
+    async allCharacters() {
+        return axiosAgent.get(`characters/all-characters`);
+
+    }
+
+    //Accounts
 
     async allAccounts() {
         return axiosAgent.get(`accounts/all-accounts`);
@@ -38,7 +69,7 @@ export default class APIInterface {
     }
 
 
-
+    //Raid Teams
 
     async allRaidTeams() {
         return axiosAgent.get(`raidteams/all-raidteams`);

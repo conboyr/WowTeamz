@@ -12,11 +12,8 @@ export default function Main() {
             setUser(undefined);
         }
     };
-    
 
-    const toggleMode = () => {
-        setSignupMode(!signupMode);
-    };
+    
 
     return (
         <Fragment>
@@ -25,9 +22,9 @@ export default function Main() {
                     <App user={user} logoutAction={logout(setUser)} />
                 ) : (
                     signupMode ? (
-                        <Signup setUser={setUser} toggleMode={toggleMode} />
+                        <Signup user={user} setUser={setUser} setSignupMode={setSignupMode}/>
                     ) : (
-                        <Login setUser={setUser} toggleMode={toggleMode} />
+                        <Login user={user} setUser={setUser} setSignupMode={setSignupMode} />
                     )
                 )
             }

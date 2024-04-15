@@ -1,30 +1,71 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
+import React, { useState, useEffect } from "react";
+import API from "./API_Interface/API_Interface";
+import {
+  Avatar, Box, Button, Checkbox, CssBaseline, Divider, FormControlLabel,
+  Grid, Link, Paper, TextField, Typography, createTheme, ThemeProvider
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [exist, setExist] = useState(true);
+  const [userCheck, setUserCheck] = useState(false);
+
+  const handleSubmit = () => {
+    console.log('Submit Signup Called');
+    setUserCheck(true);
   };
+
+  useEffect(() => {
+
+    const api = new API();
+    async function insertNewUser() {
+        api.insertNewUser(userName, email, password)
+        .then( userInfo => {
+        console.log(`API returns user info and it is: ${JSON.stringify(userInfo)}`);
+        const user = userInfo.data.user;
+        console.log("BELOW IS USER");
+        console.log(user);
+        if (userInfo.data.status === "NOT FOUND") {
+          console.log("USER IS NOT FOUND, PROCEED WITH SIGNUP");
+          setExist(false);
+        } else {
+          alert("Signup Sucessful, Thank you for signing up!");
+        }
+      });
+    }
+
+    insertNewUser();
+  }, [exist]);
+
+  useEffect(() => {
+
+    const api = new API();
+    async function checkUserEmail() {
+        api.checkUserEmail(email)
+        .then( userInfo => {
+        console.log(`API returns user info and it is: ${JSON.stringify(userInfo)}`);
+        const user = userInfo.data.user;
+        console.log("BELOW IS USER");
+        console.log(user);
+        if (userInfo.data.status === "NOT FOUND") {
+          console.log("USER IS NOT FOUND, PROCEED WITH SIGNUP");
+          setExist(false);
+          setUserCheck(false);
+        } else {
+          alert("Email already in use, please try another email address.");
+        }
+      });
+    }
+
+    checkUserEmail();
+  }, [userCheck]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -44,27 +85,17 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+                  id="userName"
+                  label="User Name"
+                  name="userName"
+                  value={userName}
+                  onChange={(u) => setUserName(u.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -75,6 +106,8 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -86,6 +119,8 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={password}
+                  onChange={(p) => setPassword(p.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -100,6 +135,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={handleSubmit}
             >
               Sign Up
             </Button>

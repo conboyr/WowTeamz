@@ -37,8 +37,16 @@ const loginRouter = require('koa-router')({
 });
 
 loginRouter.post('/', LoginController.authorizeUser);
-//loginRouter.get('/:email', LoginController.authorizeUser, (err) => console.log("wowteamz_routes.js: login-route error:", err));
 
+
+// Signup router configuration.
+
+const SignupController = require('../app/Controllers/SignupController.js');
+const signupRouter = require('koa-router')({
+    prefix: '/signup'
+});
+signupRouter.post('/', SignupController.addUser);
+signupRouter.get('/:email/', SignupController.checkUserExist);
 
 // Accounts router configuration.
 
@@ -63,7 +71,15 @@ raidteamsRouter.use(VerifyJWT);
 raidteamsRouter.get('/all-raidteams', Authorize('admin'), RaidTeamsController.allRaidTeams, err => console.log(`allRaidTeams ran into an error: ${err}`));
 raidteamsRouter.get('/:raidteam_id/:character_id', Authorize('admin'), RaidTeamsController.addPlayerToRaid);
 
+// Character router configuration
 
+const CharacterController = require('../app/Controllers/CharacterController.js');
+const characterRouter = require('koa-router')({
+    prefix: '/characters'
+});
+characterRouter.use(VerifyJWT);
+characterRouter.post('/insert', Authorize('admin'), CharacterController.insertCharacter);
+characterRouter.get('/all-characters', Authorize('admin'), CharacterController.allCharacters);
 
 /**
  * Register all of the controllers into the default controller.
@@ -71,6 +87,7 @@ raidteamsRouter.get('/:raidteam_id/:character_id', Authorize('admin'), RaidTeams
 router.use(
     '',
     loginRouter.routes(),
+    signupRouter.routes(),
     accountsRouter.routes(),
     raidteamsRouter.routes()
 );

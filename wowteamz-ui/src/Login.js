@@ -8,12 +8,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const defaultTheme = createTheme();
 
-export default function Login({ setUser }) {
+export default function Login({ setUser, setSignupMode}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authFailed, setAuthFailed] = useState(false);
   const [verifyUser, setVerifyUser] = useState(false);
-
+  //const [newUser, setNewUser] = useState(false);
+ 
   const handleLogin = () => {
     console.log("handleLogin called.");
     if (email.length === 0 || password.length === 0) {
@@ -23,6 +24,12 @@ export default function Login({ setUser }) {
       setVerifyUser(true);  // Move user verification flag here
     }
   };
+
+  const handleSignup = () => {
+    console.log("handleSignup called.");
+    setSignupMode(true); // Toggle signup mode to true
+  };
+
 
   useEffect(() => {
     if (!verifyUser) return;
@@ -100,20 +107,18 @@ export default function Login({ setUser }) {
               >
                 Sign In
               </Button>
-              <Grid container>
-              <Grid item>
+              
                 <Typography component="h7" variant="h7">
                   New User?
                 </Typography>
                 <Button
                   variant="contained"
                   sx={{ mt: 3, mb: 2, marginLeft: 1 }} // Added marginLeft to create space between the Typography and Button
-                  onClick={handleLogin}
+                  onClick={handleSignup}
                 >
                   Sign up here.
                 </Button>
-              </Grid>
-            </Grid>
+              
 
             </Box>
           </Box>
