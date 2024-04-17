@@ -68,8 +68,11 @@ const raidteamsRouter = require('koa-router')({
 });
 
 raidteamsRouter.use(VerifyJWT);
+raidteamsRouter.post('/', RaidTeamsController.createRaidTeam);
 raidteamsRouter.get('/all-raidteams', Authorize('admin'), RaidTeamsController.allRaidTeams, err => console.log(`allRaidTeams ran into an error: ${err}`));
-raidteamsRouter.get('/:raidteam_id/:character_id', Authorize('admin'), RaidTeamsController.addPlayerToRaid);
+raidteamsRouter.get('/:teamName/', Authorize('admin'), RaidTeamsController.checkForRaid);
+raidteamsRouter.get('/:raidteam_id/:character_id', Authorize('admin'), RaidTeamsController.addCharToRaid);
+characterRouter.delete('/delete/:teamName', Authorize('admin'), RaidTeamsController.deleteRaid);
 
 // Character router configuration
 

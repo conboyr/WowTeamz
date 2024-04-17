@@ -113,7 +113,7 @@ export default function Login({ setUser, setSignupMode}) {
                   sx={{ mt: 3, mb: 2, marginLeft: 1 }} // Added marginLeft to create space between the Typography and Button
                   onClick={handleSignup}
                 >
-                  Sign up here.
+                  Sign up here
                 </Button>
               
 

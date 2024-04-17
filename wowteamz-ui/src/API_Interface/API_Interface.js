@@ -79,8 +79,29 @@ export default class APIInterface {
         return axiosAgent.get(`raidteams/all-raidteams`);
     }
 
+    async checkRaidName(teamName) {
+        return axiosAgent.get(`/raidteams/${teamName}`);
+    }
+
+    async createRaidTeam(teamName, numPlayers, raidDay_A, raidDay_B, raidTime) {
+        //console.log(JSON.stringify(teamName));
+        //console.log(JSON.stringify(numPlayers));
+        //console.log(JSON.stringify(raidDay_A));
+        //console.log(JSON.stringify(raidDay_B));
+        //console.log(JSON.stringify(raidTime));
+        return axiosAgent.post(`/raidteams/`, {teamName, numPlayers, raidDay_A, raidDay_B, raidTime});
+    }
+
     async addPlayerToRaid(raidteam_id, character_id) {
         return axiosAgent.get(`raidteams/${raidteam_id}/${character_id}`);
+    }
+
+    async charsForRaidTeam(raidTeam_id) {
+        return axiosAgent.get(`/raidteams/${raidTeam_id}/chars-for-raidteam`);
+    }
+
+    async deleteRaidTeam(teamName) {
+        return axios.delete(`/raidteams/delete/${teamName}`);
     }
 
 }
