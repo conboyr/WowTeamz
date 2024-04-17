@@ -105,7 +105,7 @@ function NameInputComponent() {
                                 {characterTableAttributes.map((attr) => (
                                     <TableCell key={attr.title} align={attr.align}>
                                         {attr.attributeDBName === 'imagePath' ? (
-                                            <img src={character[attr.attributeDBName]} alt={`Avatar of ${character.name}`} style={{ width: '100px', height: '100px' }} />
+                                            <img src={character[attr.attributeDBName]} alt={`Avatar of ${character.name}`} style={{ width: '70px', height: '70px' }} />
                                         ) : (
                                             character[attr.attributeDBName]
                                         )}

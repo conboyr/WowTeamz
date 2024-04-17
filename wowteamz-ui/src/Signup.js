@@ -20,6 +20,7 @@ export default function SignUp({setSignupMode, setUser}) {
   const handleSubmit = () => {
     console.log('Submit Signup Called');
     setUserCheck(true);
+    console.log(email);
   };
 
   const handleSignin = () => {
@@ -27,31 +28,6 @@ export default function SignUp({setSignupMode, setUser}) {
     setSignupMode(false);
   };
 
-  // ADD TO DATABASE 
-
-  useEffect(() => {
-    if (email.length === 0 || userName.length === 0 || password.length === 0) return;
-    const api = new API();
-    async function insertNewUser() {
-        api.insertNewUser(userName, email, password)
-        .then( userInfo => {
-        console.log(`API returns user info and it is: ${JSON.stringify(userInfo)}`);
-        const user = userInfo.data.user;
-        console.log("BELOW IS USER");
-        console.log(user);
-        if (userInfo.data.status === "NOT FOUND") {
-          window.alert("Signup Sucessful, Thank you for signing up!");
-          setUser(user);
-          setExist(false);
-          setSignupMode(false);
-        } else {
-          window.alert("Signup Not Sucessful");
-        }
-      });
-    }
-
-    insertNewUser();
-  }, [exist]);
 
   // CHECK FOR USER
 
@@ -62,20 +38,48 @@ export default function SignUp({setSignupMode, setUser}) {
         api.checkUserEmail(email)
         .then( userInfo => {
         console.log(`API returns user info and it is: ${JSON.stringify(userInfo.data.user)}`);
-        const user = userInfo.data.user;
-        console.log("BELOW IS USER");
-        console.log(user);
-        if (userInfo.data.status === "NOT FOUND") {
+        console.log("HERE IS USERINFO.DATA");
+        console.log (userInfo.data);
+        console.log("BELOW IS USER status");
+        console.log(userInfo.data.status);
+        if (userInfo.data.status === "OK") {  
           console.log("USER IS NOT FOUND, PROCEED WITH SIGNUP");
-          setUserCheck(false);
-        } else {
-          window.alert("Email already in use, please try another email address.");
+          setExist(false);
         }
       });
     }
 
     checkUserEmail();
   }, [userCheck]);
+
+  // ADD TO DATABASE 
+
+  useEffect(() => {
+    if (email.length === 0 || userName.length === 0 || password.length === 0) return;
+    const api = new API();
+    async function insertNewUser() {
+        api.insertNewUser(userName, email, password)
+        .then( newUserInfo => {
+        console.log(`API returns user info and it is: ${JSON.stringify(newUserInfo)}`);
+        const user = newUserInfo.data.user;
+        console.log("BELOW IS USER");
+        console.log(user);
+        if (newUserInfo.data.status === "OK") {
+          alert("Signup Sucessful, Thank you for signing up!");
+          setUser(user);
+          setSignupMode(false);
+        } else {
+          alert("Signup Not Sucessful");
+        }
+      });
+    }
+
+    insertNewUser();
+  }, [exist]);
+
+
+
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>

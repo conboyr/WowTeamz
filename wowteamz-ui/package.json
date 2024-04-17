@@ -7,7 +7,8 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.0.1",
     "@mui/material": "^5.15.15",
-    "@mui/x-charts": "^7.1.1",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "@mui/x-charts": "^7.2.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -15,6 +16,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^4.0.3",
+    "styled-components": "^6.1.8",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -42,6 +44,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "webpack": "^4.44.2"
   }
 }
