@@ -1,6 +1,7 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import API from '../../API_Interface/API_Interface'
 
+import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -100,7 +101,7 @@ const characterTableAttributes = [
 ];
 
 
-export default function CharacterTable({setMakeRaidMode}) {
+export default function CharacterTable({setMakeRaidMode, setAddCharMode}) {
     const [characters, setCharacters] = useState([]);
     const [raidteam, setRaidTeam] = useState([]);
     const [openRows, setOpenRows] = useState([]);
@@ -198,17 +199,38 @@ export default function CharacterTable({setMakeRaidMode}) {
 
     return (
         <Fragment>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography>Create a Raid Team</Typography>
-                <IconButton
-                    onClick={() => setMakeRaidMode(true)}
-                    aria-label="add character"
-                    size="large"
-                    sx={{ fontSize: '3rem', ml: 1 }} // Adjust ml for spacing between Typography and IconButton
-                >
-                    <AddIcon sx={{ fontSize: 'inherit' }} />
-                </IconButton>
-            </Box>
+            <Grid container spacing={2}>
+                <Grid item xs={6} sm={6}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Button variant="outlined" color="success" onClick={() => setMakeRaidMode(true)}>
+                                                                        Add Raid Team
+                            <IconButton
+                            aria-label="add character"
+                            size="large"
+                            color="green"
+                            sx={{ fontSize: '2rem', ml: 1 }} // Adjust ml for spacing between Typography and IconButton
+                        >
+                            <AddIcon sx={{ fontSize: 'inherit' }} />
+                            </IconButton>
+                        </Button>
+                    </Box>
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Button variant="outlined" color="success" onClick={() => setAddCharMode(true)}>
+                                                                        Add Character to Raid
+                            <IconButton
+                            aria-label="add character"
+                            size="large"
+                            color="green"
+                            sx={{ fontSize: '2rem', ml: 1 }} // Adjust ml for spacing between Typography and IconButton
+                        >
+                            <AddIcon sx={{ fontSize: 'inherit' }} />
+                            </IconButton>
+                        </Button>
+                    </Box>
+                </Grid>
+            </Grid> 
 
 
             {raidteam.length > 0 && (
