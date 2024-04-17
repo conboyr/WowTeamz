@@ -118,24 +118,9 @@ const PresentationListItems = (props) => {
     </div>;
 };
 
-const ContainerListItems = (props) => {
-    return  <div>
-        {
-            props.menuItemTitles.map(title =>
-                <ListItem button onClick={() => props.onClick(title)} key={title}>
-                    <ListItemText primary={title} key={title}/>
-                    {
-                        props.selectedItem === title && <ListItemIcon><ChevronRightIcon/></ListItemIcon>
-                    }
-                </ListItem>
-            )
-        }
-    </div>
-};
 
 const findSelectedComponent = (selectedItem) => {
-    const component = [...presentationComponents(),
-                        ...containerComponents()].filter(comp => comp.title === selectedItem);
+    const component = [...presentationComponents()].filter(comp => comp.title === selectedItem);
     if(component.length === 1)
         return component[0];
 

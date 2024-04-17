@@ -1,8 +1,6 @@
 import Accounts from '../Components/Accounts/Accounts';
 import Characters from '../Components/Characters/Characters';
 import RaidTeams from '../Components/RaidTeams/RaidTeams';
-import Markets from '../Components/Markets/Markets';
-import Transactions from '../Components/Transactions/Transactions';
 import Summary from '../Components/SummaryPage/Summary';
 
 const presentationComponents = (props) => {
@@ -10,10 +8,6 @@ const presentationComponents = (props) => {
         {
             title: 'Summary',
             component: <Summary/>
-        },
-        {
-            title: 'Markets',
-            component: <Markets/>
         },
         {
             title: 'Raid Team',
@@ -27,21 +21,8 @@ const presentationComponents = (props) => {
             title: 'Add Character',
             component: <Characters/>
         },
-        {
-            title: 'Transactions',
-            component: <Transactions />
-        },
     ];
 };
 
 
-const containerComponents = (props) => {
-    return [
-        {
-            title: 'Activities',
-            component: <Transactions />
-        }
-    ];
-};
-
-export {presentationComponents, containerComponents};
+export {presentationComponents};
