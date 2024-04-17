@@ -1,24 +1,36 @@
-import {Fragment} from "react";
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import MainDrawer from './menu/MainDrawer';
+import { Fragment } from "react";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import MainDrawer from "./menu/MainDrawer";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-const makeUserName = ({email, userName}) => {
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#fefefe",
+    },
+  },
+  // Used for fonts
+  typography: {},
+});
 
-    return `${email} ${userName}`;
+const makeUserName = ({ email, userName }) => {
+  return `${email} ${userName}`;
 };
 
-export default function App({user, logoutAction}) {
-    const mainPageTitle = "WoW-Teamz";
+export default function App({ user, logoutAction }) {
+  const mainPageTitle = "WoW-Teamz";
 
-    return (
-                <MainDrawer title={mainPageTitle}
-                            user={makeUserName(user)}
-                            logoutAction={logoutAction}/>
-    )
-
+  return (
+    <ThemeProvider theme={theme}>
+      <MainDrawer
+        title={mainPageTitle}
+        user={makeUserName(user)}
+        logoutAction={logoutAction}
+      />
+    </ThemeProvider>
+  );
 }
-
