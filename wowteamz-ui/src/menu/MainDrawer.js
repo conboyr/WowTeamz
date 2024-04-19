@@ -69,6 +69,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
+// Component used to hold the navigation bar
 const TopBar = ({ open, selectedItem, handleSelectedItem, logoutAction }) => {
   // This component is responsible for rendering the Toolbar that is drawn
   // at the top of the drawer.
@@ -166,39 +167,7 @@ export default function MainDraswer({ title, user, logoutAction }) {
         open={open}
         logoutAction={logoutAction}
       />
-      {/* <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          <PresentationListItems
-            selectedItem={selectedItem}
-            onClick={handleSelectedItem}
-            menuItemTitles={presentationComponents().map((comp) => comp.title)}
-          />
-        </List>
-      </Drawer> */}
-
-      {/* CONTENT OF EACH LINK*/}
+      // Allow each link to display components
       <Main open={open}>
         <DrawerHeader />
         {findSelectedComponent(selectedItem).component}
