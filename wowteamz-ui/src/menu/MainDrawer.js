@@ -69,36 +69,22 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-const TopBar = ({ open, handleDrawerOpen, title, user, logoutAction }) => {
+const TopBar = ({ open, selectedItem, handleSelectedItem, logoutAction }) => {
   // This component is responsible for rendering the Toolbar that is drawn
   // at the top of the drawer.
 
   return (
     <Fragment>
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={false}>
         <Toolbar>
-          {/* <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
-          >
-            <MenuIcon />
-          </IconButton> */}
-          <List sx={{ display: "flex" }}>
-            <ListItem button>
-              <ListItemText primary="Summary" />
-            </ListItem>
-            <ListItem button>
-              <ListItemText primary="RaidTeam" />
-            </ListItem>
-            <ListItem button>
-              <ListItemText primary="Accounts" />
-            </ListItem>
-            <ListItem button>
-              <ListItemText primary="Characters" />
-            </ListItem>
+          <List>
+            <PresentationListItems
+              selectedItem={selectedItem}
+              onClick={handleSelectedItem}
+              menuItemTitles={presentationComponents().map(
+                (comp) => comp.title
+              )}
+            />
           </List>
           <Box width="100%" justifyContent="right" flex={1}>
             <Typography
@@ -119,15 +105,18 @@ const TopBar = ({ open, handleDrawerOpen, title, user, logoutAction }) => {
 
 const PresentationListItems = (props) => {
   return (
-    <div>
+    <div style={{ display: "flex" }}>
       {props.menuItemTitles.map((title) => (
-        <ListItem button onClick={() => props.onClick(title)} key={title}>
+        <ListItem
+          button
+          style={{
+            color: props.selectedItem === title ? "blue" : "inherit",
+            width: "fit-content",
+          }}
+          onClick={() => props.onClick(title)}
+          key={title}
+        >
           <ListItemText primary={title} key={title} />
-          {props.selectedItem === title && (
-            <ListItemIcon>
-              <ChevronRightIcon />
-            </ListItemIcon>
-          )}
         </ListItem>
       ))}
     </div>
@@ -151,7 +140,7 @@ const findSelectedComponent = (selectedItem) => {
 
 export default function MainDraswer({ title, user, logoutAction }) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [selectedItem, setSelectedItem] = useState("Summary");
 
   console.log("in MainDrawer");
@@ -172,13 +161,44 @@ export default function MainDraswer({ title, user, logoutAction }) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <TopBar
-        title={title}
+        selectedItem={selectedItem}
+        handleSelectedItem={handleSelectedItem}
         open={open}
-        handleDrawerOpen={handleDrawerOpen}
-        user={user}
         logoutAction={logoutAction}
       />
+      {/* <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <List>
+          <PresentationListItems
+            selectedItem={selectedItem}
+            onClick={handleSelectedItem}
+            menuItemTitles={presentationComponents().map((comp) => comp.title)}
+          />
+        </List>
+      </Drawer> */}
 
+      {/* CONTENT OF EACH LINK*/}
       <Main open={open}>
         <DrawerHeader />
         {findSelectedComponent(selectedItem).component}
