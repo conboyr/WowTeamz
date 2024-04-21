@@ -72,7 +72,7 @@ raidteamsRouter.post('/', RaidTeamsController.createRaidTeam);
 raidteamsRouter.get('/all-raidteams', Authorize('admin'), RaidTeamsController.allRaidTeams, err => console.log(`allRaidTeams ran into an error: ${err}`));
 raidteamsRouter.get('/:teamName/', Authorize('admin'), RaidTeamsController.checkForRaid);
 raidteamsRouter.get('/:raidteam_id/:character_id', Authorize('admin'), RaidTeamsController.addCharToRaid);
-raidteamsRouter.delete('/delete/:teamName', Authorize('admin'), RaidTeamsController.deleteRaid);
+raidteamsRouter.delete('/delete/:raidTeam_id', Authorize('admin'), RaidTeamsController.deleteRaid);
 
 // Character router configuration
 
@@ -84,6 +84,7 @@ characterRouter.use(VerifyJWT);
 characterRouter.post('/insert', Authorize('admin'), CharacterController.insertCharacter);
 characterRouter.get('/all-characters', Authorize('admin'), CharacterController.allCharacters);
 characterRouter.delete('/delete/:name', Authorize('admin'), CharacterController.deleteCharacter);
+characterRouter.post('/insert-notes/:name', Authorize('admin'), CharacterController.insertNotes);
 /**
  * Register all of the controllers into the default controller.
  */

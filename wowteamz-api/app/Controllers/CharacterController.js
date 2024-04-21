@@ -16,7 +16,7 @@ async function callBlizzardAPI(userName) {
         }
 
         const data = await response.json();
-        console.log(`Data received: ${JSON.stringify(data)}`);
+        //console.log(`Data received: ${JSON.stringify(data)}`);
 
         if (!data.thumbnail_url) {
             console.error('Thumbnail URL is missing from the API response');
@@ -120,8 +120,48 @@ const deleteCharacter = async (ctx) => {
         ctx.body = { message: "Failed to delete data", error: error.message };
     }
 };
+const insertNotes = async (ctx) => {
+    const name = ctx.params.name;
+    const { notes } = ctx.request.body;
+    try {
+
+
+        const query = `
+            UPDATE WT_Character 
+            SET notes = ?
+            WHERE name = ?
+        `;
+        await new Promise((resolve, reject) => {
+            dbConnection.query({
+                sql: query,
+                values: [notes, name]
+            }, (error, results) => {
+                if (error) {
+                    console.error("Database update error:", error);
+                    ctx.status = 500;
+                    ctx.body = "Failed to update notes";
+                    return reject(error);
+                }
+                if (results.affectedRows > 0) {
+                    ctx.status = 200;
+                    ctx.body = { success: true, message: "Notes updated successfully" };
+                    resolve();
+                } else {
+                    ctx.status = 404;
+                    ctx.body = { success: false, message: "Character not found" };
+                    resolve();
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error updating notes:', error);
+        ctx.status = 500;
+        ctx.body = "Failed to update notes";
+    }
+};
 module.exports = {
     insertCharacter,
     allCharacters,
-    deleteCharacter
+    deleteCharacter,
+    insertNotes
 };

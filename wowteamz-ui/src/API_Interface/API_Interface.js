@@ -61,6 +61,10 @@ export default class APIInterface {
     async deleteCharacter(characterName) {
         return axios.delete(`/characters/delete/${encodeURIComponent(characterName)}`);
     }
+    
+    async insertNotes(characterName, notes) {
+        return axios.post(`/characters/insert-notes/${encodeURIComponent(characterName)}`, { notes });
+    }
 
     //Accounts
 
@@ -84,11 +88,6 @@ export default class APIInterface {
     }
 
     async createRaidTeam(teamName, numPlayers, raidDay_A, raidDay_B, raidTime) {
-        //console.log(JSON.stringify(teamName));
-        //console.log(JSON.stringify(numPlayers));
-        //console.log(JSON.stringify(raidDay_A));
-        //console.log(JSON.stringify(raidDay_B));
-        //console.log(JSON.stringify(raidTime));
         return axiosAgent.post(`/raidteams/`, {teamName, numPlayers, raidDay_A, raidDay_B, raidTime});
     }
 
@@ -100,8 +99,8 @@ export default class APIInterface {
         return axiosAgent.get(`/raidteams/${raidTeam_id}/chars-for-raidteam`);
     }
 
-    async deleteRaidTeam(teamName) {
-        return axios.delete(`/raidteams/delete/${teamName}`);
+    async deleteRaid(raidTeam_id) {
+        return axios.delete(`/raidteams/delete/${raidTeam_id}`);
     }
 
 }

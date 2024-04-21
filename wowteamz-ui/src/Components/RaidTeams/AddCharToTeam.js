@@ -140,29 +140,7 @@ export default function SignUp({setMakeRaidMode}) {
                     </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
-                <FormControl sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel id="rd2">Raid Day 2</InputLabel>
-                        <Select
-                        id="rd2"
-                        value={raidDay_B}
-                        label="Raid Day 2"
-                        onChange={(b) => setRaidDayB(b.target.value)}
-                        >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={'Monday'}>Monday</MenuItem>
-                        <MenuItem value={'Tuesday'}>Tuesday</MenuItem>
-                        <MenuItem value={'Wednesday'}>Wednesday</MenuItem>
-                        <MenuItem value={'Thursday'}>Thursday</MenuItem>
-                        <MenuItem value={'Friday'}>Friday</MenuItem>
-                        <MenuItem value={'Saturday'}>Saturday</MenuItem>
-                        <MenuItem value={'Sunday'}>Sunday</MenuItem>
-                        </Select>
-                    <FormHelperText>Select 'None' if only 1 raid day</FormHelperText>
-                    </FormControl>
-                </Grid>
+              
                 <Grid item xs={12}>
                 <TextField
                   required

@@ -72,14 +72,14 @@ const checkForRaid = (ctx) => {
 };
 
 
+
 const charsForRaidTeam = (ctx) => {
     return new Promise((resolve, reject) => {
         const query = `
-        SELECT * 
-            FROM WT_Character c 
-            JOIN WT_raidTeam r ON c.raidTeam_id = r.raidTeam_id 
-            WHERE c.raidTeam_id = ?
-                    `;
+        SELECT c.imagePath, r.teamName, c.name, c.race, c.class, c.role, c.gearScore
+        FROM WT_Character c 
+        JOIN WT_raidTeam r ON c.raidTeam_id = r.raidTeam_id 
+        WHERE c.raidTeam_id = ?`;
         dbConnection.query({
             sql: query,
             values: [ctx.params.raidTeam_id]
@@ -139,9 +139,7 @@ const createRaidTeam = (ctx) => {
 const addCharToRaid = (ctx) => {
     return new Promise((resolve, reject) => {
 
-    let query = "UPDATE WT_Character SET raidTeam_id = ? WHERE character_id = ?"
-    
-    ;
+    let query = "UPDATE WT_Character SET raidTeam_id = ? WHERE character_id = ?";
     dbConnection.query({
         sql: query,
         values: [ctx.params.raidTeam_id, ctx.params.character_id]
@@ -166,16 +164,16 @@ const addCharToRaid = (ctx) => {
 }
 
 const deleteRaid = async (ctx) => {
-    const teamName = ctx.params;  // Assuming you're passing the character's ID in the route parameter
+    const {raidTeam_id} = ctx.params;  // Assuming you're passing the character's ID in the route parameter
     try {
         const query = `
             DELETE FROM WT_raidTeam
-            WHERE teamName = ?;
+            WHERE raidTeam_id = ?
         `;
         await new Promise((resolve, reject) => {
             dbConnection.query({
                 sql: query,
-                values: [teamName]
+                values: [raidTeam_id]
             }, (error, results) => {
                 if (error) {
                     console.error("Database deletion error:", error);
