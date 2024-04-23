@@ -64,16 +64,6 @@ const raidteamsTableAttributes = [
 
 const characterTableAttributes = [
     {
-        title: '',
-        attributeDBName: '',
-        align: 'left'
-    },
-    {
-        title: 'Image',
-        attributeDBName: 'imagePath',
-        align: 'left'
-    },
-    {
         title: 'Team Name',
         attributeDBName: 'teamName',
         align: 'left'
@@ -106,18 +96,19 @@ const characterTableAttributes = [
 ];
 
 
-export default function CharacterTable({setMakeRaidMode, setAddCharMode, setOneRaidMode, setRaid}) {
+export default function CharacterTable({setMakeRaidMode, setAddCharMode, setOneRaidMode, setRaid, setChars }) {
     const [characters, setCharacters] = useState([]);
-    const [raidteam, setRaidTeam] = useState([]);
+    const [raidteams, setRaidTeams] = useState([]);
     const [openRows, setOpenRows] = useState([]);
     const [buttonClicked, setButtonClicked] = useState(false); // State to track button click
     const [raidTeam_id, setRaidTeam_id] = useState(null);
     const [deleteMode, setDeleteMode] = useState(false);
-    const [removeChar, setRemoveChar] = useState(false);
-    const [characterName, setCharacterName] = useState("");
+    const [removeMode, setRemoveMode] = useState(false);
+    const [character_id, setCharacter_id] = useState(null);
     const [raidTeamName, setRaidTeamName] = useState("");
     const [highlightMode, setHighlightMode] = useState(false);
     const [hoveredIdx, setHoveredIdx] = useState(null);
+    const [hoveredCIdx, setCHoveredIdx] = useState(null);
     const [reloadTable, setReloadTable] = useState(false);
     //ALL TEAMS
 
@@ -127,7 +118,7 @@ export default function CharacterTable({setMakeRaidMode, setAddCharMode, setOneR
         async function getRaidTeams() {
             const raidteamsJSONString = await api.allRaidTeams();
             console.log(`raidteams from the DB ${JSON.stringify(raidteamsJSONString)}`);
-            setRaidTeam(raidteamsJSONString.data);
+            setRaidTeams(raidteamsJSONString.data);
         }
         setReloadTable(false);
         getRaidTeams();
@@ -136,34 +127,44 @@ export default function CharacterTable({setMakeRaidMode, setAddCharMode, setOneR
     //DROP DOWN ARROW
     
     useEffect(() => {
-        if (buttonClicked) {
+        if (raidTeam_id) { // Only run the effect if raidTeam_id is not null
             const api = new API();
-
-            async function getCharacters() {
+    
+            async function charsForRaidTeam() {
                 const charactersJSONString = await api.charsForRaidTeam(JSON.stringify(raidTeam_id));
+                console.log(JSON.stringify(raidTeam_id));
+                console.log(`characters from the DB ${JSON.stringify(charactersJSONString)}`);
                 setCharacters(charactersJSONString.data);
                 setOpenRows(new Array(charactersJSONString.data.length).fill(false));
             }
     
-            getCharacters();
+            charsForRaidTeam();
         }
-    }, [buttonClicked, raidTeam_id]); // Execute useEffect whenever buttonClicked changes
+    }, [raidTeam_id]); // Add raidTeam_id to the dependency array
+     // Execute useEffect whenever buttonClicked changes
 
     //REMOVE CHARACTER
 
     useEffect(() => {
-        if (buttonClicked) {
+        if (removeMode) {
             const api = new API();
-
-            async function getCharacters() {
-                const charactersJSONString = await api.charsForRaidTeam(JSON.stringify(raidTeam_id));
-                setCharacters(charactersJSONString.data);
-                setOpenRows(new Array(charactersJSONString.data.length).fill(false));
+            async function removeChar() {
+                try {
+                    console.log('here you are');
+                    console.log(character_id);
+                    const userInfo = await api.removeChar(JSON.stringify(character_id));
+                    console.log(`API returns user info and it is: ${JSON.stringify(userInfo.data.user)}`);
+                } catch (error) {
+                    console.error('Failed to remove character from team:', error);
+                }
             }
-    
-            getCharacters();
+            
+            removeChar().then(() => {
+                setRemoveMode(false); // Reset deleteMode to prevent repeated deletion
+                setReloadTable(true);
+            });
         }
-    }, [removeChar]); // Execute useEffect whenever buttonClicked changes
+    }, [removeMode, character_id]);
 
     //DELETE TEAM
 
@@ -193,7 +194,9 @@ export default function CharacterTable({setMakeRaidMode, setAddCharMode, setOneR
 
     const handleRaidClick = (raid) => {
         console.log(raid);
+        console.log(characters);
         setRaid(raid);
+        setChars(characters);
         setOneRaidMode(true);
     };
 
@@ -205,14 +208,18 @@ export default function CharacterTable({setMakeRaidMode, setAddCharMode, setOneR
         setHoveredIdx(null);  // Clear the hovered row index
     };
 
-    const handleRemove = async (name) => {
-        setRemoveChar(true);
-        setCharacterName(name)
+    const handleCMouseEnter = (index) => {
+        setCHoveredIdx(index);  // Set the currently hovered row index
     };
 
-  
+    const handleCMouseLeave = () => {
+        setCHoveredIdx(null);  // Clear the hovered row index
+    };
+
+    
 
     const handleRowToggle = (index) => {
+        setRaidTeam_id(index.raidTeam_id);
         const newOpenRows = [...openRows];
         newOpenRows[index] = !newOpenRows[index];
         setOpenRows(newOpenRows);
@@ -221,6 +228,14 @@ export default function CharacterTable({setMakeRaidMode, setAddCharMode, setOneR
     const handleButtonClick = (raidTeam_id) => {
         setButtonClicked(true); // Set buttonClicked to true when button is clicked
         setRaidTeam_id(raidTeam_id);
+    };
+
+    const handleRemove = async (char, event) => {
+        event.stopPropagation(); // This stops the event from bubbling up to the parent elements.
+        console.log(char.raidTeam_id);
+        setCharacter_id(char.character_id);
+        setRemoveMode(true);
+        console.log("Remove clicked for", char);
     };
 
     const handleDelete = (raidteam, event) => {
@@ -251,7 +266,7 @@ export default function CharacterTable({setMakeRaidMode, setAddCharMode, setOneR
                 </Grid>
             </Grid> 
     
-            {raidteam.length > 0 && (
+            {raidteams.length > 0 && (
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="market table">
                         <TableHead>
@@ -265,20 +280,20 @@ export default function CharacterTable({setMakeRaidMode, setAddCharMode, setOneR
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {raidteam.map((team, idx) => (
+                            {raidteams.map((team, idx) => (
                                 <Fragment key={idx}>
                                     <TableRow sx={{ backgroundColor: idx === hoveredIdx ? '#CFD8D7' : 'inherit' }}
                                         onMouseEnter={() => handleMouseEnter(idx)}
                                         onMouseLeave={handleMouseLeave}
                                     >
                                         <TableCell>
-                                            <IconButton
+                                            <IconButton key={idx}
                                                 aria-label="expand row"
                                                 size="small"
-                                                onClick={(event) => {
-                                                    event.stopPropagation();
+                                                onClick={() => {
+                                                    
                                                     handleRowToggle(idx);
-                                                    handleButtonClick(raidteam[idx]['raidTeam_id']);
+                                                    handleButtonClick(raidteams[idx]['raidTeam_id']);
                                                 }}
                                             >
                                                 {openRows[idx] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -299,7 +314,7 @@ export default function CharacterTable({setMakeRaidMode, setAddCharMode, setOneR
                                         <TableRow>
                                             <TableCell colSpan={raidteamsTableAttributes.length + 1}>
                                                 <TableContainer component={Paper}>
-                                                    <Table size="small"> 
+                                                    <Table size="small" sx={{ backgroundColor: '#E6EEF0' }}> 
                                                         <TableHead>
                                                             <TableRow>
                                                                 {characterTableAttributes.map((attr, idx) => (
@@ -310,18 +325,18 @@ export default function CharacterTable({setMakeRaidMode, setAddCharMode, setOneR
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
-                                                         
-
                                                             {Array.isArray(characters) && characters.map((character, idx) => (
 
-                                                                <TableRow key={idx}>
+                                                                <TableRow key={idx} sx={{ backgroundColor: idx === hoveredCIdx ? '#CFD8D7' : 'inherit' }}
+                                                                onMouseEnter={() => handleCMouseEnter(idx)}
+                                                                onMouseLeave={handleCMouseLeave}>
                                                                     {characterTableAttributes.map((attr, idx) => (
                                                                         <TableCell key={idx} align={attr.align}>
-                                                                            {character[attr.attributeDBName]}
+                                                                           {character[attr.attributeDBName]}
                                                                         </TableCell>
                                                                     ))}
                                                                     <TableCell align="center">
-                                                                        <Button variant="outlined" color="error" onClick={() => handleRemove(character.name)}>
+                                                                        <Button variant="outlined" color="error" onClick={(event) => handleRemove(character, event)}>
                                                                             Remove
                                                                         </Button>
                                                                     </TableCell>

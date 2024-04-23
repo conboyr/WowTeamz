@@ -45,16 +45,16 @@ export default class APIInterface {
 
     //Characters
 
-    async insertCharacter(userName) {
-        return axiosAgent.post(`/characters/insert`, { userName })
+    async insertCharacter(userName, raidTeam_id) {
+        return axiosAgent.post(`/characters/insert/`, { userName, raidTeam_id })
             .then(response => response.data)
             .catch(error => ({
                 error,
                 character: undefined
             }));
     }
-    async allCharacters() {
-        return axiosAgent.get(`characters/all-characters`);
+    async allCharacters(raidTeam_id) {
+        return axiosAgent.get(`characters/all-characters/${raidTeam_id}`);
 
     }
 
@@ -64,6 +64,13 @@ export default class APIInterface {
     
     async insertNotes(characterName, notes) {
         return axios.post(`/characters/insert-notes/${encodeURIComponent(characterName)}`, { notes });
+    }
+    async insertRole(characterName, raidTeam_id, role) {
+        return axios.post(`/characters/insert-role/${encodeURIComponent(characterName)}/${raidTeam_id}`, { role })  // Ensure correct URL and data
+            .then(response => response.data)
+            .catch(error => ({
+                error,
+            }));
     }
 
     //Accounts
@@ -91,12 +98,16 @@ export default class APIInterface {
         return axiosAgent.post(`/raidteams/`, {teamName, numPlayers, raidDay_A, raidDay_B, raidTime});
     }
 
-    async addPlayerToRaid(raidteam_id, character_id) {
-        return axiosAgent.get(`raidteams/${raidteam_id}/${character_id}`);
+    async addPlayerToRaid(raidTeam_id, character_id) {
+        return axiosAgent.get(`raidteams/${raidTeam_id}/${character_id}`);
     }
 
     async charsForRaidTeam(raidTeam_id) {
         return axiosAgent.get(`/raidteams/${raidTeam_id}/chars-for-raidteam`);
+    }
+
+    async removeChar(character_id) {
+        return axios.patch(`/raidteams/remove/${character_id}`);
     }
 
     async deleteRaid(raidTeam_id) {

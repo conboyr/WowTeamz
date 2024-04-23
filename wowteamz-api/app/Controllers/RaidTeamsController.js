@@ -75,14 +75,16 @@ const checkForRaid = (ctx) => {
 
 const charsForRaidTeam = (ctx) => {
     return new Promise((resolve, reject) => {
+        const {raidTeam_id} = ctx.params;
         const query = `
-        SELECT c.imagePath, r.teamName, c.name, c.race, c.class, c.role, c.gearScore
+        SELECT c.raidTeam_id, c.imagePath, r.teamName, c.name, c.race, c.class, c.role, c.gearScore
         FROM WT_Character c 
         JOIN WT_raidTeam r ON c.raidTeam_id = r.raidTeam_id 
-        WHERE c.raidTeam_id = ?`;
+        WHERE c.raidTeam_id = ?
+        `;
         dbConnection.query({
             sql: query,
-            values: [ctx.params.raidTeam_id]
+            values: [raidTeam_id]
         }, (error, tuples) => {
             if (error) {
                 console.log("Connection error in RaidTeamsController::charsForRaidTeam", error);
@@ -163,6 +165,37 @@ const addCharToRaid = (ctx) => {
     });
 }
 
+const removeChar = async (ctx) => {
+    const {character_id} = ctx.params;  // Assuming you're passing the character's ID in the route parameter
+    try {
+        const query = `
+        UPDATE WT_Character SET raidTeam_id = null WHERE character_id = ?
+        `;
+        await new Promise((resolve, reject) => {
+            dbConnection.query({
+                sql: query,
+                values: [character_id]
+            }, (error, results) => {
+                if (error) {
+                    console.error("Database deletion error:", error);
+                    ctx.status = 500;
+                    ctx.body = { message: "Failed to delete character" };
+                    return reject(error);
+                }
+                ctx.body = {
+                    status: "OK",
+                };
+                resolve();
+            });
+        });
+    } catch (error) {
+        console.error('Error deleting character data:', error);
+        ctx.status = 500;
+        ctx.body = { message: "Failed to delete data", error: error.message };
+    }
+};
+
+
 const deleteRaid = async (ctx) => {
     const {raidTeam_id} = ctx.params;  // Assuming you're passing the character's ID in the route parameter
     try {
@@ -200,5 +233,6 @@ module.exports = {
     addCharToRaid,
     checkForRaid,
     deleteRaid,
+    removeChar,
     charsForRaidTeam
 };

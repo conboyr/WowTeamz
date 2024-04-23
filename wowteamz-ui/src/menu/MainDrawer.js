@@ -22,42 +22,24 @@ import {
 } from "./MenuPresentationComponents";
 import Button from "@mui/material/Button";
 
-const drawerWidth = 240;
+//const drawerWidth = 240;
 
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme, open }) => ({
+const Main = styled("main")(
+  ({ theme }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(open && {
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
+    marginLeft: 0, // Keep margin left constant at 0
   })
 );
 
+
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
+})(({ theme}) => ({
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
+  })
 }));
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -159,7 +141,7 @@ export default function MainDraswer({ title, user, logoutAction }) {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <TopBar
         selectedItem={selectedItem}
@@ -167,7 +149,9 @@ export default function MainDraswer({ title, user, logoutAction }) {
         open={open}
         logoutAction={logoutAction}
       />
+      {
       // Allow each link to display components
+      }
       <Main open={open}>
         <DrawerHeader />
         {findSelectedComponent(selectedItem).component}

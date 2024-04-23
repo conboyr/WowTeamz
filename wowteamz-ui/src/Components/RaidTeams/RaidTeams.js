@@ -9,6 +9,7 @@ export default function RaidTeams() {
     const [makeRaidMode, setMakeRaidMode] = useState(false);    
     const [addCharMode, setAddCharMode] = useState(false);
     const [raid, setRaid] = useState(undefined);
+    const [chars, setChars] = useState([]);
     const [oneRaidMode, setOneRaidMode] = useState(false);
 
     return (
@@ -16,7 +17,7 @@ export default function RaidTeams() {
 
             {   
                 oneRaidMode ? (
-               <OneRaidTeam raid={raid} /> 
+               <OneRaidTeam raid={raid} chars={chars} /> 
             )
               :  makeRaidMode ? (
                 <MakeRaidTeam setMakeRaidMode={setMakeRaidMode} />
@@ -25,7 +26,8 @@ export default function RaidTeams() {
             )  :    (
                 <CharsForRaidTeam 
                     setOneRaidMode={setOneRaidMode} 
-                    setRaid={setRaid} 
+                    setRaid={setRaid}
+                    setChars={setChars}
                     setMakeRaidMode={setMakeRaidMode} 
                     setAddCharMode={setAddCharMode} 
                 />

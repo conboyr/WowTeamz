@@ -71,7 +71,8 @@ raidteamsRouter.use(VerifyJWT);
 raidteamsRouter.post('/', RaidTeamsController.createRaidTeam);
 raidteamsRouter.get('/all-raidteams', Authorize('admin'), RaidTeamsController.allRaidTeams, err => console.log(`allRaidTeams ran into an error: ${err}`));
 raidteamsRouter.get('/:teamName/', Authorize('admin'), RaidTeamsController.checkForRaid);
-raidteamsRouter.get('/:raidteam_id/:character_id', Authorize('admin'), RaidTeamsController.addCharToRaid);
+raidteamsRouter.get('/:raidTeam_id/chars-for-raidteam', Authorize('admin'), RaidTeamsController.charsForRaidTeam);
+raidteamsRouter.patch('/remove/:character_id', Authorize('admin'), RaidTeamsController.removeChar);
 raidteamsRouter.delete('/delete/:raidTeam_id', Authorize('admin'), RaidTeamsController.deleteRaid);
 
 // Character router configuration
@@ -82,9 +83,10 @@ const characterRouter = require('koa-router')({
 });
 characterRouter.use(VerifyJWT);
 characterRouter.post('/insert', Authorize('admin'), CharacterController.insertCharacter);
-characterRouter.get('/all-characters', Authorize('admin'), CharacterController.allCharacters);
+characterRouter.get('/all-characters/:raidTeam_id', Authorize('admin'), CharacterController.allCharacters);
 characterRouter.delete('/delete/:name', Authorize('admin'), CharacterController.deleteCharacter);
 characterRouter.post('/insert-notes/:name', Authorize('admin'), CharacterController.insertNotes);
+characterRouter.post('/insert-role/:characterName/:raidTeam_id', Authorize('admin'), CharacterController.insertRole);
 /**
  * Register all of the controllers into the default controller.
  */

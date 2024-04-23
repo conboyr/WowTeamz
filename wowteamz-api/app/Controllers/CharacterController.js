@@ -37,18 +37,19 @@ async function callBlizzardAPI(userName) {
 }
 const insertCharacter = async (ctx) => {
     const userName = ctx.request.body.userName;
+    const raidTeam_id = ctx.request.body.raidTeam_id;
     console.log(userName.imgPath);
     try {
         const { name, characterClass, race, gearLevel, imgPath } = await callBlizzardAPI(userName);
 
         const query = `
-            INSERT INTO WT_Character (name, class, race, gearScore, imagePath)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO WT_Character (name, class, race, gearScore, imagePath,  raidTeam_id)
+            VALUES (?, ?, ?, ?, ?, ?)
         `;
         await new Promise((resolve, reject) => {
             dbConnection.query({
                 sql: query,
-                values: [name, characterClass, race, gearLevel, imgPath]
+                values: [name, characterClass, race, gearLevel, imgPath, raidTeam_id]
             }, (error, results) => {
                 if (error) {
                     console.error("Database insertion error:", error);
@@ -58,7 +59,7 @@ const insertCharacter = async (ctx) => {
                 }
                 // Return the newly added character data to the frontend
                 ctx.status = 201;
-                ctx.body = { name, characterClass, race, gearLevel, imgPath }; // Ensure this matches what the frontend expects
+                ctx.body = { name, characterClass, race, gearLevel, imgPath, raidTeam_id }; // Ensure this matches what the frontend expects
                 resolve();
             });
         });
@@ -70,10 +71,13 @@ const insertCharacter = async (ctx) => {
 };
 const allCharacters = async (ctx) => {
     console.log('accounts all allCharacters called.');
+    const raidTeam_id= ctx.params.raidTeam_id;
+
     return new Promise((resolve, reject) => {
-        let query = `SELECT * FROM WT_Character`;
+        let query = `SELECT * FROM WT_Character WHERE raidTeam_Id = ?`;
         dbConnection.query({
             sql: query,
+            values: [raidTeam_id]
         }, (error, tuples) => {
             if (error) {
                 console.log("Connection error in allCharacters::allCharacters", error);
@@ -128,7 +132,7 @@ const insertNotes = async (ctx) => {
 
         const query = `
             UPDATE WT_Character 
-            SET notes = ?
+            SET role = ?
             WHERE name = ?
         `;
         await new Promise((resolve, reject) => {
@@ -159,9 +163,57 @@ const insertNotes = async (ctx) => {
         ctx.body = "Failed to update notes";
     }
 };
+const insertRole = async (ctx) => {
+    const name = ctx.params.characterName;  // Extract character name
+    const raidTeam_id = ctx.params.raidTeam_id;  // Extract raidTeam ID
+    const { role } = ctx.request.body;  // Ensure 'role' is extracted from request body
+
+    if (!role) {
+        ctx.status = 400;  // Return an error if role is missing
+        ctx.body = "Role is required";
+        return;
+    }
+
+    try {
+        const query = `
+            UPDATE WT_Character 
+            SET role = ?
+            WHERE name = ? AND raidTeam_id = ?
+        `;
+
+        await new Promise((resolve, reject) => {
+            dbConnection.query({
+                sql: query,
+                values: [role, name, raidTeam_id],  // Ensure correct parameter order
+            }, (error, results) => {
+                if (error) {
+                    console.error("Database update error:", error);
+                    ctx.status = 500;
+                    ctx.body = "Failed to update role";
+                    return reject(error);
+                }
+
+                if (results.affectedRows > 0) {
+                    ctx.status = 200;  // Update successful
+                    ctx.body = { success: true, message: "Role updated successfully" };
+                    resolve();
+                } else {
+                    ctx.status = 404;  // Character not found
+                    ctx.body = { success: false, message: "Character not found" };
+                    resolve();
+                }
+            });
+        });
+    } catch (error) {
+        console.error("Error updating role:", error);
+        ctx.status = 500;
+        ctx.body = "Failed to update role";
+    }
+};
 module.exports = {
     insertCharacter,
     allCharacters,
     deleteCharacter,
-    insertNotes
+    insertNotes,
+    insertRole
 };

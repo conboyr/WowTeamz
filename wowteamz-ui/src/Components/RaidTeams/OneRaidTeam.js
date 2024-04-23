@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import Calendar from '../Calendar/Calendar';
+import React, { Fragment, useState } from 'react';
+//import Calendar from '../Calendar/Calendar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,77 +9,105 @@ import Grid from '@mui/material/Grid';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { Divider } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
+import Character from "../Characters/Characters";
 
-export default function OneRaidTeam({ raid }) {
+export default function OneRaidTeam({ raid, chars}) {
     // Assuming you manage the state of adding a character to the raid
-    const [addCharMode, setAddCharMode] = React.useState(false);
+    const [addCharMode, setAddCharMode] = useState(false);
+    const [viewCharacters, setViewCharacters] = useState(false);
+
+    const roleCount = {};
+    
+    chars.forEach(character => {
+        const role = character.role;
+        roleCount[role] = (roleCount[role] || 0) + 1;
+    });
+
+    console.log(roleCount)
 
     return (
         <Fragment>
             
             <Grid container spacing={2}>
                 <Grid item xs={3} sm={3}>
-                    <Typography component="div">
+                    <Typography component="h3">
                         Team Name: {raid.teamName} 
                     </Typography>
                 </Grid>
                 <Grid item xs={3} sm={3}>
-                    <Typography component="div">
+                    <Typography component="h3">
                         Raid Days: {raid.raidDay_A} / {raid.raidDay_B} 
                     </Typography>
                 </Grid>
                 <Grid item xs={3} sm={3}>
-                    <Typography component="div">
+                    <Typography component="h3">
                         Raid Time: {raid.raidTime}
                     </Typography>
                 </Grid>
                 <Grid item xs={3} sm={3}>
-                    <Typography component="div">
+                    <Typography component="h3">
                         Team Size: {raid.numPlayers}
                     </Typography>
                 </Grid>
             </Grid>
 
             <Divider />
-
-            <PieChart
-                series={[
-                    {
-                    data: [
-                        { id: 0, value: 10, label: 'series A' },
-                        { id: 1, value: 15, label: 'series B' },
-                        { id: 2, value: 20, label: 'series C' },
-                    ],
-                    },
-                ]}
-                width={400}
-                height={200}
-/>
-
-
+            
+                    
+                
             <BarChart
-            series={[
-                { data: [35, 44, 24, 34] },
-                { data: [51, 6, 49, 30] },
-                { data: [15, 25, 30, 50] },
-                { data: [60, 50, 15, 25] },
-            ]}
-            height={290}
-            xAxis={[{ data: ['Q1', 'Q2', 'Q3', 'Q4'], scaleType: 'band' }]}
-            margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
-            />
+                series={[
+                    { data: chars.map(char => char.gearScore) } // Array of gear scores for each character
+                ]}
+                height={300}
+                xAxis={[
+                    { 
+                        data: chars.map(char => char.name), 
+                        scaleType: 'band',
+                        tickLabelAngle: -45, // Rotate labels by -45 degrees
+                        tickLabelProps: () => ({
+                            textAnchor: 'end', // Align text to the end of the tick
+                            fontSize: '10px', // Adjust font size if necessary
+                            dy: '0.5em' // Adjust vertical position of label
+                        })
+                    }
+                ]}
+                margin={{ top: 10, bottom: 60, left: 40, right: 10 }} // Increase bottom margin to accommodate rotated labels
+                />  
+
+                
 
 
             <Grid container spacing={2}>
                 <Grid item xs={6} sm={6}>
+                <PieChart
+                    series={[
+                        {
+                            data: Object.keys(roleCount).map(role => ({
+                                id: role,
+                                value: roleCount[role],
+                                label: `${role}: ${roleCount[role]}`
+                            }))
+                        }
+                    ]}
+                    width={400}
+                    height={200}
+                />
+
+                </Grid>
+                <Grid item xs={6} sm={6}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Button variant="outlined" color="success" onClick={() => setAddCharMode(true)}>
-                            Add Character to Raid
+                    <Button
+                            variant="outlined"
+                            color="success"
+                            onClick={() => setViewCharacters(true)}  // Set state to show characters
+                        >
+                            View Characters
                             <IconButton
                                 aria-label="add character"
                                 size="large"
-                                color="success" // Fixed color from 'green' to 'success' to match Button
-                                sx={{ fontSize: '2rem', ml: 1 }} // Adjust ml for spacing between Button and IconButton
+                                color="success"
+                                sx={{ fontSize: '2rem', ml: 1 }}
                             >
                                 <AddIcon sx={{ fontSize: 'inherit' }} />
                             </IconButton>
@@ -87,6 +115,11 @@ export default function OneRaidTeam({ raid }) {
                     </Box>
                 </Grid>
             </Grid>
+
+            {/* Conditionally Render Character Component with Raid ID */}
+            {viewCharacters && (
+                <Character raidID={raid.raidTeam_id} />  // Pass the raid ID to the Character component
+            )}
         </Fragment>
     )
 }

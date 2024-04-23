@@ -53,7 +53,7 @@ const addUser = (ctx) => {
     console.log(email, password, userName);
 
     return new Promise((resolve, reject) => {
-        let query = "INSERT INTO WT_Account (email, password, userName) VALUES (?, ?, ?)"
+        let query = "INSERT INTO WT_Account (email, password, userName, role) VALUES (?, ?, ?, 'admin')"
         ;
         dbConnection.query({
             sql: query,
