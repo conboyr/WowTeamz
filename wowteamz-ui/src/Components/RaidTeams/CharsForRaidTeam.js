@@ -111,7 +111,7 @@ export default function CharacterTable({
   setOneRaidMode,
   setRaid,
 }) {
-  const [editedText, setEditedText] = useState("");
+  const [text, setText] = useState("");
   const [displayText, setDisplayText] = useState("");
   const [characters, setCharacters] = useState([]);
   const [raidteam, setRaidTeam] = useState([]);
@@ -245,11 +245,11 @@ export default function CharacterTable({
   };
 
   const handleInputChange = (event) => {
-    setEditedText(event.target.value);
+    setText(event.target.value);
   };
 
   const handleSubmit = () => {
-    setDisplayText(editedText);
+    setDisplayText(text);
   };
 
   return (
@@ -357,12 +357,12 @@ export default function CharacterTable({
                             name="message"
                             rows="5"
                             cols="20"
-                            value={editedText}
+                            value={text}
                             onChange={handleInputChange}
                           />
                         </div>
                         <div>
-                          <button onClick={handleSubmit}>Submit Text</button>
+                          <button onClick={handleSubmit}>Submit</button>
                         </div>
                         <div>
                           <p>{displayText}</p>
