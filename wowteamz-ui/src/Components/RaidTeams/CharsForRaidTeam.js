@@ -111,6 +111,8 @@ export default function CharacterTable({
   setOneRaidMode,
   setRaid,
 }) {
+  const [editedText, setEditedText] = useState("");
+  const [displayText, setDisplayText] = useState("");
   const [characters, setCharacters] = useState([]);
   const [raidteam, setRaidTeam] = useState([]);
   const [openRows, setOpenRows] = useState([]);
@@ -242,6 +244,14 @@ export default function CharacterTable({
     console.log("Delete clicked for", raidteam);
   };
 
+  const handleInputChange = (event) => {
+    setEditedText(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    setDisplayText(editedText);
+  };
+
   return (
     <Fragment>
       <Grid container spacing={2}>
@@ -272,6 +282,7 @@ export default function CharacterTable({
             <TableHead>
               <TableRow>
                 <TableCell></TableCell>
+
                 {raidteamsTableAttributes.map((attr, idx) => (
                   <TableCell key={idx} align={attr.align}>
                     {attr.title}
@@ -326,19 +337,38 @@ export default function CharacterTable({
                       </Button>
                     </TableCell>
                   </TableRow>
-                  <div>
+                  {/*  <div>
                     <textarea
                       style={{ width: "100%" }}
                       name="message"
-                      rows="10"
-                      cols="30"
+                      rows="5"
+                      cols="20"
                     >
-                      Initial text goes here...
+                      Input text
                     </textarea>
-                  </div>
+                  </div> */}
 
                   {openRows[idx] && (
                     <TableRow>
+                      <div>
+                        <div>
+                          <textarea
+                            style={{ width: "100%" }}
+                            name="message"
+                            rows="5"
+                            cols="20"
+                            value={editedText}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div>
+                          <button onClick={handleSubmit}>Submit Text</button>
+                        </div>
+                        <div>
+                          <p>{displayText}</p>
+                        </div>
+                      </div>
+
                       <TableCell colSpan={raidteamsTableAttributes.length + 1}>
                         <TableContainer component={Paper}>
                           <Table size="small">
