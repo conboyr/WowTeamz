@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
+import TextField from "@mui/material/TextField";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
@@ -339,67 +340,111 @@ export default function CharacterTable({
                   </TableRow>
 
                   {openRows[idx] && (
-                    <TableRow>
-                      <div>
-                        <div>
-                          <textarea
-                            style={{ width: "100%" }}
-                            name="message"
-                            rows="5"
-                            cols="20"
-                            value={text}
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <div>
-                          <button onClick={handleSubmit}>Submit</button>
-                        </div>
-                        <div>
-                          <p>{displayText}</p>
-                        </div>
-                      </div>
+                    <>
+                      <TableRow>
+                        <TableCell
+                          colSpan={raidteamsTableAttributes.length + 1}
+                        >
+                          <div className="">
+                            <TextField
+                              style={{ width: "100%" }}
+                              name="message"
+                              multiline
+                              maxRows={3}
+                              placeholder="Enter text here.."
+                              variant="outlined"
+                              value={text}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "end",
+                              width: "100%",
+                            }}
+                          >
+                            <Button
+                              variant="outlined"
+                              color="success"
+                              onClick={handleSubmit}
+                            >
+                              Submit
+                            </Button>
+                          </div>
 
-                      <TableCell colSpan={raidteamsTableAttributes.length + 1}>
-                        <TableContainer component={Paper}>
-                          <Table size="small">
-                            <TableHead>
-                              <TableRow>
-                                {characterTableAttributes.map((attr, idx) => (
-                                  <TableCell key={idx} align={attr.align}>
-                                    {attr.title}
-                                  </TableCell>
-                                ))}
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {Array.isArray(characters) &&
-                                characters.map((character, idx) => (
-                                  <TableRow key={idx}>
-                                    {characterTableAttributes.map(
-                                      (attr, idx) => (
-                                        <TableCell key={idx} align={attr.align}>
-                                          {character[attr.attributeDBName]}
-                                        </TableCell>
-                                      )
-                                    )}
-                                    <TableCell align="center">
-                                      <Button
-                                        variant="outlined"
-                                        color="error"
-                                        onClick={() =>
-                                          handleRemove(character.name)
-                                        }
-                                      >
-                                        Remove
-                                      </Button>
+                          <div>
+                            <p>{displayText}</p>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        {/* <div>
+                          <div>
+                            <textarea
+                              style={{ width: "100%" }}
+                              name="message"
+                              rows="3"
+                              cols="20"
+                              value={text}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                          <div>
+                            <button onClick={handleSubmit}>Submit</button>
+                          </div>
+                          <div>
+                            <p>{displayText}</p>
+                          </div>
+                        </div> */}
+
+                        <TableCell
+                          colSpan={raidteamsTableAttributes.length + 1}
+                        >
+                          <TableContainer component={Paper}>
+                            <Table size="small">
+                              <TableHead>
+                                <TableRow>
+                                  {characterTableAttributes.map((attr, idx) => (
+                                    <TableCell key={idx} align={attr.align}>
+                                      {attr.title}
                                     </TableCell>
-                                  </TableRow>
-                                ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </TableCell>
-                    </TableRow>
+                                  ))}
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {Array.isArray(characters) &&
+                                  characters.map((character, idx) => (
+                                    <TableRow key={idx}>
+                                      {characterTableAttributes.map(
+                                        (attr, idx) => (
+                                          <TableCell
+                                            key={idx}
+                                            align={attr.align}
+                                          >
+                                            {character[attr.attributeDBName]}
+                                          </TableCell>
+                                        )
+                                      )}
+                                      <TableCell align="center">
+                                        <Button
+                                          variant="outlined"
+                                          color="error"
+                                          onClick={() =>
+                                            handleRemove(character.name)
+                                          }
+                                        >
+                                          Remove
+                                        </Button>
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </TableCell>
+                      </TableRow>
+                    </>
                   )}
                 </Fragment>
               ))}
