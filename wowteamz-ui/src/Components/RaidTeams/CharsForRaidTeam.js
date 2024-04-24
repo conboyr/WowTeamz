@@ -337,16 +337,6 @@ export default function CharacterTable({
                       </Button>
                     </TableCell>
                   </TableRow>
-                  {/*  <div>
-                    <textarea
-                      style={{ width: "100%" }}
-                      name="message"
-                      rows="5"
-                      cols="20"
-                    >
-                      Input text
-                    </textarea>
-                  </div> */}
 
                   {openRows[idx] && (
                     <TableRow>
