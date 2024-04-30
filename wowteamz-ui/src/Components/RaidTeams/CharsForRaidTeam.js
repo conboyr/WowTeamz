@@ -357,95 +357,111 @@ export default function CharacterTable({
                       </Button>
                     </TableCell>
                   </TableRow>
+
+                  {/* -------------------------------------------------------------- */}
+
                   {openRows[idx] && (
                     <TableRow>
-                      <TableCell colSpan={raidteamsTableAttributes.length + 1}>
-                        <div className="">
-                          <TextField
-                            style={{ width: "100%" }}
-                            name="message"
-                            multiline
-                            maxRows={3}
-                            placeholder="Enter text here.."
-                            variant="outlined"
-                            value={text}
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "end",
-                            width: "100%",
-                          }}
+                      <TableRow>
+                        <TableCell
+                          colSpan={raidteamsTableAttributes.length + 1}
                         >
-                          <Button
-                            variant="outlined"
-                            color="success"
-                            onClick={handleSubmit}
+                          <div className="">
+                            <TextField
+                              style={{ width: "100%" }}
+                              name="message"
+                              multiline
+                              maxRows={3}
+                              placeholder="Enter text here.."
+                              variant="outlined"
+                              value={text}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "end",
+                              width: "100%",
+                            }}
                           >
-                            Submit
-                          </Button>
-                        </div>
+                            <Button
+                              variant="outlined"
+                              color="success"
+                              onClick={handleSubmit}
+                            >
+                              Submit
+                            </Button>
+                          </div>
 
-                        <div>
-                          <p>{displayText}</p>
-                        </div>
-                      </TableCell>
-
-                      <TableCell colSpan={raidteamsTableAttributes.length + 1}>
-                        <TableContainer component={Paper}>
-                          <Table
-                            size="small"
-                            sx={{ backgroundColor: "#E6EEF0" }}
-                          >
-                            <TableHead>
-                              <TableRow>
-                                {characterTableAttributes.map((attr, idx) => (
-                                  <TableCell key={idx} align={attr.align}>
-                                    {attr.title}
-                                  </TableCell>
-                                ))}
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {Array.isArray(characters) &&
-                                characters.map((character, idx) => (
-                                  <TableRow
-                                    key={idx}
-                                    sx={{
-                                      backgroundColor:
-                                        idx === hoveredCIdx
-                                          ? "#CFD8D7"
-                                          : "inherit",
-                                    }}
-                                    onMouseEnter={() => handleCMouseEnter(idx)}
-                                    onMouseLeave={handleCMouseLeave}
-                                  >
-                                    {characterTableAttributes.map(
-                                      (attr, idx) => (
-                                        <TableCell key={idx} align={attr.align}>
-                                          {character[attr.attributeDBName]}
-                                        </TableCell>
-                                      )
-                                    )}
-                                    <TableCell align="center">
-                                      <Button
-                                        variant="outlined"
-                                        color="error"
-                                        onClick={(event) =>
-                                          handleRemove(character, event)
-                                        }
-                                      >
-                                        Remove
-                                      </Button>
+                          <div>
+                            <p>{displayText}</p>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        {/* -------------------------------------------------------------- */}
+                        <TableCell
+                          colSpan={raidteamsTableAttributes.length + 1}
+                        >
+                          <TableContainer component={Paper}>
+                            <Table
+                              size="small"
+                              sx={{ backgroundColor: "#E6EEF0" }}
+                            >
+                              <TableHead>
+                                <TableRow>
+                                  {characterTableAttributes.map((attr, idx) => (
+                                    <TableCell key={idx} align={attr.align}>
+                                      {attr.title}
                                     </TableCell>
-                                  </TableRow>
-                                ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </TableCell>
+                                  ))}
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {Array.isArray(characters) &&
+                                  characters.map((character, idx) => (
+                                    <TableRow
+                                      key={idx}
+                                      sx={{
+                                        backgroundColor:
+                                          idx === hoveredCIdx
+                                            ? "#CFD8D7"
+                                            : "inherit",
+                                      }}
+                                      onMouseEnter={() =>
+                                        handleCMouseEnter(idx)
+                                      }
+                                      onMouseLeave={handleCMouseLeave}
+                                    >
+                                      {characterTableAttributes.map(
+                                        (attr, idx) => (
+                                          <TableCell
+                                            key={idx}
+                                            align={attr.align}
+                                          >
+                                            {character[attr.attributeDBName]}
+                                          </TableCell>
+                                        )
+                                      )}
+                                      <TableCell align="center">
+                                        <Button
+                                          variant="outlined"
+                                          color="error"
+                                          onClick={(event) =>
+                                            handleRemove(character, event)
+                                          }
+                                        >
+                                          Remove
+                                        </Button>
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </TableCell>
+                      </TableRow>
                     </TableRow>
                   )}
                 </Fragment>
