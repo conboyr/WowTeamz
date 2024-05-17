@@ -83,6 +83,36 @@ export default class APIInterface {
         return axiosAgent.get(`accounts/${email}`);
     }
 
+    //Guild
+
+    async checkForGuild(guild_name) {
+        return axiosAgent.get(`/guild/${guild_name}`);
+    }
+
+    async getGuild() {
+        return axiosAgent.get(`guild/all-guilds`);
+    }
+
+    async createGuild(guild_name, faction, gm_name, realm) {
+        return axiosAgent.post(`/guild/`, {guild_name, faction, gm_name, realm});
+    }
+
+    async addAccntToGuild(guild_id, account_id) {
+        return axiosAgent.get(`guild/${guild_id}/${account_id}`);
+    }
+
+    async raidsForGuild(guild_id) {
+        return axiosAgent.get(`/guild/${guild_id}/raids-for-guild`);
+    }
+
+    async removeAccnt(account_id) {
+        return axios.patch(`/guild/remove/${account_id}`);
+    }
+
+    async deleteGuild(guild_id) {
+        return axios.delete(`/guild/delete/${guild_id}`);
+    }
+
 
     //Raid Teams
 

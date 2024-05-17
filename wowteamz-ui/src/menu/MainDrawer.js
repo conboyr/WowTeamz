@@ -106,7 +106,7 @@ const PresentationListItems = (props) => {
   );
 };
 
-const findSelectedComponent = (selectedItem) => {
+const findSelectedComponent = (selectedItem, user) => {
   const component = [...presentationComponents()].filter(
     (comp) => comp.title === selectedItem
   );
@@ -121,10 +121,10 @@ const findSelectedComponent = (selectedItem) => {
   };
 };
 
-export default function MainDraswer({ title, user, logoutAction }) {
+export default function MainDraswer({ title, user, logoutAction, account_id}) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  const [selectedItem, setSelectedItem] = useState("Summary");
+  const [selectedItem, setSelectedItem] = useState("Home");
 
   console.log("in MainDrawer");
 
@@ -139,7 +139,8 @@ export default function MainDraswer({ title, user, logoutAction }) {
   const handleSelectedItem = (title) => {
     setSelectedItem(title);
   };
-
+  console.log("user in main drawer");
+  console.log(account_id);
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -152,9 +153,9 @@ export default function MainDraswer({ title, user, logoutAction }) {
       {
       // Allow each link to display components
       }
-      <Main open={open}>
+      <Main user={user} account_id={account_id} open={open}>
         <DrawerHeader />
-        {findSelectedComponent(selectedItem).component}
+        {findSelectedComponent(selectedItem, user).component}
       </Main>
     </Box>
   );

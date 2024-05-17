@@ -6,7 +6,7 @@ export default function Summary(props) {
         <Fragment>
             
             <Typography component="div" variant='h3'>
-                Summary here
+                Home
             </Typography>
         </Fragment>
     )

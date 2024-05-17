@@ -87,6 +87,19 @@ characterRouter.get('/all-characters/:raidTeam_id', Authorize('admin'), Characte
 characterRouter.delete('/delete/:name', Authorize('admin'), CharacterController.deleteCharacter);
 characterRouter.post('/insert-notes/:name', Authorize('admin'), CharacterController.insertNotes);
 characterRouter.post('/insert-role/:characterName/:raidTeam_id', Authorize('admin'), CharacterController.insertRole);
+
+//Guild
+const GuildController = require('../app/Controllers/GuildController.js');
+const guildRouter = require('koa-router')({
+    prefix: '/guild'
+});
+guildRouter.use(VerifyJWT);
+guildRouter.post('/', GuildController.createGuild);
+guildRouter.get('/:guild_name/', Authorize('admin'), GuildController.checkForGuild);
+guildRouter.get('/all-guilds', Authorize('admin'), GuildController.getGuild);
+guildRouter.get('/:guild_id/raids-for-guild', Authorize('admin'), GuildController.raidsForGuild);
+guildRouter.patch('/remove/:account_id', Authorize('admin'), GuildController.removeAccnt);
+guildRouter.delete('/delete/:guild_id', Authorize('admin'), GuildController.deleteGuild);
 /**
  * Register all of the controllers into the default controller.
  */
@@ -96,6 +109,7 @@ router.use(
     signupRouter.routes(),
     accountsRouter.routes(),
     characterRouter.routes(),
+    guildRouter.routes(),
     raidteamsRouter.routes()
 );
 

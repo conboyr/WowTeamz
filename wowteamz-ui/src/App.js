@@ -21,6 +21,10 @@ const makeUserName = ({ email, userName }) => {
   return `${email} ${userName}`;
 };
 
+const makeAccount = ({account_id}) => {
+  return `${account_id}`;
+};
+
 export default function App({ user, logoutAction }) {
   const mainPageTitle = "WoW-Teamz";
 
@@ -30,6 +34,7 @@ export default function App({ user, logoutAction }) {
         title={mainPageTitle}
         user={makeUserName(user)}
         logoutAction={logoutAction}
+        account_id={makeAccount(user)}
       />
     </ThemeProvider>
   );

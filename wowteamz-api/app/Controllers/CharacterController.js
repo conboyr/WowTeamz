@@ -132,7 +132,7 @@ const insertNotes = async (ctx) => {
 
         const query = `
             UPDATE WT_Character 
-            SET role = ?
+            SET notes = ?
             WHERE name = ?
         `;
         await new Promise((resolve, reject) => {

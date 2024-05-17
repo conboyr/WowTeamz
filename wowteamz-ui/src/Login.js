@@ -2,11 +2,16 @@ import React, { useState, useEffect } from "react";
 import API from "./API_Interface/API_Interface";
 import {
   Avatar, Box, Button, Checkbox, CssBaseline, Divider, FormControlLabel,
-  Grid, Link, Paper, TextField, Typography, createTheme, ThemeProvider
-} from "@mui/material";
+  Grid, Link, Paper, TextField, Typography} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-const defaultTheme = createTheme();
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 export default function Login({ setUser, setSignupMode}) {
   const [email, setEmail] = useState("");
@@ -55,11 +60,12 @@ export default function Login({ setUser, setSignupMode}) {
   }, [verifyUser, email, password, setUser]); // Ensure dependencies are correctly listed
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid item xs={false} sm={4} md={7} sx={{
-          backgroundImage: "url(https://wallpapers.com/images/hd/world-of-warcraft-restoration-druid-healing-69ucodb01a3oyfab.webp)",
+          backgroundImage: "url(https://i.imgur.com/4SbfxIK.jpeg)",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -68,12 +74,10 @@ export default function Login({ setUser, setSignupMode}) {
           <Box sx={{ 
             my: 8, mx: 4, display: "flex", flexDirection: "column", alignItems: "center"
           }}>
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign in
-            </Typography>
+            <Box> 
+            <img src="http://www.royconboy.com/images/WT-logo.PNG" alt="WT Logo" style={{ width: '100%', height: 'auto' }} />
+            </Box>
+            
             <Box component="form" noValidate sx={{ mt: 1}}>
               <TextField
                 error={authFailed}
